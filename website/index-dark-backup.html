@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>SafeCart — Spot Fake Checkouts &amp; Online Scams Before You Pay</title>
+  <meta name="description" content="SafeCart is a free Chrome extension that warns you before you enter your card on a fake checkout, keeps a private log of every purchase, and alerts you the moment a store you shop at is breached." />
+  <meta name="theme-color" content="#0b0a1e" />
+  <link rel="canonical" href="https://safecart.co/" />
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="SafeCart — Your shopping safety net for the internet" />
+  <meta property="og:description" content="Free Chrome extension. Spot fake checkouts before you type your card, track every purchase, and get breach alerts for the stores you shop at." />
+  <meta property="og:url" content="https://safecart.co/" />
+  <meta property="og:image" content="https://safecart.co/og.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="SafeCart — your shopping safety net. Spot fake checkouts, track every purchase, get breach alerts. Free Chrome extension." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SafeCart — Your shopping safety net for the internet" />
+  <meta name="twitter:description" content="Spot fake checkouts, track every purchase, and get breach alerts. Free Chrome extension." />
+  <meta name="twitter:image" content="https://safecart.co/og.png" />
+  <meta name="twitter:image:alt" content="SafeCart — your shopping safety net. Spot fake checkouts, track every purchase, get breach alerts." />
+
+  <!-- Inline SVG favicon (no external file needed) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%235aa2ff'/%3E%3Cstop offset='1' stop-color='%237c5cff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M24 3 L40 9 L40 19 C40 30 33 37 24 42 C15 37 8 30 8 19 L8 9 Z' fill='url(%23g)'/%3E%3Cpath d='M16.5 23 L21.5 28 L31 17' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Flip no-js -> js before paint so reveal styles never trap content -->
+  <script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ECGP0XNK7C"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ECGP0XNK7C');
+  </script>
+
+  <style>
+    :root{
+      --bg-0:#0b0a1e; --bg-1:#100e29; --bg-2:#15123a;
+      --ink:#f4f5fb; --muted:#b3b5d6; --faint:#83849f;
+      --brand:#5aa2ff; --brand-2:#7c5cff;
+      --danger:#ff6b6b; --success:#3ddc97; --warning:#ffb74d;
+      --card:rgba(255,255,255,.045); --card-2:rgba(255,255,255,.07);
+      --border:rgba(255,255,255,.09); --border-2:rgba(255,255,255,.16);
+      --shadow:0 24px 70px rgba(0,0,0,.5);
+      --radius:18px; --radius-sm:12px; --maxw:1140px;
+      --grad:linear-gradient(135deg,#5aa2ff 0%,#7c5cff 100%);
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      background:var(--bg-0); color:var(--ink); line-height:1.6;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
+    }
+    /* ambient background glows */
+    body::before{
+      content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+      background:
+        radial-gradient(60% 50% at 80% -5%, rgba(124,92,255,.28), transparent 60%),
+        radial-gradient(55% 45% at 5% 5%, rgba(90,162,255,.22), transparent 55%),
+        radial-gradient(80% 60% at 50% 110%, rgba(61,220,151,.10), transparent 60%),
+        linear-gradient(180deg,var(--bg-0),var(--bg-1) 40%,var(--bg-0));
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    section{scroll-margin-top:84px}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+      color:var(--brand); background:rgba(90,162,255,.10);
+      border:1px solid rgba(90,162,255,.22); padding:6px 14px;border-radius:100px;
+    }
+    .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 0 4px rgba(61,220,151,.18)}
+    h1,h2,h3{letter-spacing:-.02em;line-height:1.12;font-weight:800}
+    .gradient-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .muted{color:var(--muted)}
+    .section-head{max-width:680px;margin:0 auto 56px;text-align:center}
+    .section-head h2{font-size:clamp(28px,4vw,42px);margin-bottom:14px}
+    .section-head p{color:var(--muted);font-size:18px}
+
+    /* buttons */
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:9px;
+      font-family:inherit;font-size:15.5px;font-weight:700;cursor:pointer;
+      border-radius:12px;padding:14px 24px;border:1px solid transparent;
+      transition:transform .15s ease,box-shadow .15s ease,background .15s ease,border-color .15s ease;
+      white-space:nowrap;
+    }
+    .btn-primary{background:var(--grad);color:#fff;box-shadow:0 10px 30px rgba(108,122,255,.35)}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(108,122,255,.5)}
+    .btn-ghost{background:rgba(255,255,255,.05);color:var(--ink);border-color:var(--border-2)}
+    .btn-ghost:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
+    .btn-sm{padding:10px 18px;font-size:14.5px}
+    .btn svg{width:18px;height:18px}
+
+    /* top banner */
+    .top-banner{position:relative;z-index:60;background:linear-gradient(90deg,rgba(90,162,255,.16),rgba(124,92,255,.16));border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:10px;font-size:14px;padding:9px 44px 9px 16px;line-height:1.4}
+    .top-banner .tb-link{display:inline-flex;align-items:center;gap:9px;color:var(--ink);transition:transform .15s ease;cursor:pointer}
+    .top-banner .tb-link:hover{transform:translateX(1px)}
+    .top-banner .tb-link strong{color:var(--brand);font-weight:700}
+    .top-banner .tb-arrow{color:var(--brand);font-weight:700}
+    .top-banner .tb-close{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:6px;background:transparent;border:0;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit}
+    .top-banner .tb-close:hover{background:rgba(255,255,255,.08);color:var(--ink)}
+    .top-banner.hidden{display:none}
+    @media (max-width:640px){
+      .top-banner{font-size:12.5px;padding:8px 36px 8px 12px}
+      .top-banner .tb-link{gap:6px}
+      .top-banner .tb-emoji{display:none}
+    }
+
+    /* nav */
+    header.nav{position:sticky;top:0;z-index:50;transition:background .25s ease,border-color .25s ease,backdrop-filter .25s}
+    header.nav.scrolled{background:rgba(11,10,30,.72);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px;letter-spacing:-.02em}
+    .brand .logo{width:34px;height:34px;filter:drop-shadow(0 4px 10px rgba(108,122,255,.5))}
+    .nav-links{display:flex;align-items:center;gap:34px}
+    .nav-links a{color:var(--muted);font-size:15px;font-weight:500;transition:color .15s}
+    .nav-links a:hover{color:var(--ink)}
+    .nav-cta{display:flex;align-items:center;gap:12px}
+    .menu-btn{display:none;background:none;border:0;cursor:pointer;padding:8px;color:var(--ink)}
+    .menu-btn svg{width:26px;height:26px}
+
+    /* hero */
+    .hero{padding:72px 0 40px;position:relative}
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:54px;align-items:center}
+    .hero h1{font-size:clamp(38px,5.4vw,62px);font-weight:900;margin:22px 0 20px}
+    .hero p.lead{font-size:19px;color:var(--muted);max-width:560px;margin-bottom:30px}
+    .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px}
+    .hero-follow{display:flex;align-items:center;gap:14px;margin-top:26px;flex-wrap:wrap}
+    .hero-follow .lbl{color:var(--faint);font-size:12.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+    .hero-follow .foot-social{margin-top:0}
+    .hero-micro{display:flex;flex-wrap:wrap;gap:18px;color:var(--faint);font-size:14px}
+    .hero-micro span{display:inline-flex;align-items:center;gap:7px}
+    .hero-micro svg{width:16px;height:16px;color:var(--success)}
+
+    /* browser mock */
+    .mock{
+      position:relative;background:#0e0c24;border:1px solid var(--border-2);
+      border-radius:16px;box-shadow:var(--shadow);overflow:hidden;
+    }
+    .mock-bar{display:flex;align-items:center;gap:14px;padding:13px 16px;background:rgba(255,255,255,.04);border-bottom:1px solid var(--border)}
+    .dots{display:flex;gap:7px}
+    .dots i{width:11px;height:11px;border-radius:50%;display:block}
+    .dots i:nth-child(1){background:#ff5f57}.dots i:nth-child(2){background:#febc2e}.dots i:nth-child(3){background:#28c840}
+    .urlbar{flex:1;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.35);border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:13px;color:#ff9b9b}
+    .urlbar svg{width:14px;height:14px;color:var(--danger);flex-shrink:0}
+    .mock-body{position:relative;padding:26px 24px 30px;min-height:300px}
+    .ghost-form{filter:blur(.6px);opacity:.45}
+    .ghost-form .row{height:13px;border-radius:6px;background:rgba(255,255,255,.14);margin-bottom:14px}
+    .ghost-form .row.s{width:42%}.ghost-form .row.m{width:70%}.ghost-form .row.l{width:100%}
+    .ghost-form .field{height:42px;border-radius:9px;background:rgba(255,255,255,.07);border:1px solid var(--border);margin-bottom:14px}
+    .warn{
+      position:absolute;left:50%;top:54%;transform:translate(-50%,-50%);
+      width:min(330px,86%);background:linear-gradient(180deg,rgba(40,14,20,.96),rgba(28,10,16,.98));
+      border:1px solid rgba(255,107,107,.5);border-radius:16px;
+      box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 0 1px rgba(255,107,107,.12);
+      padding:22px 22px 20px;text-align:center;
+    }
+    .warn .shield{width:52px;height:52px;margin:0 auto 12px;color:var(--danger)}
+    .warn .tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#ffd0d0;background:rgba(255,107,107,.16);border:1px solid rgba(255,107,107,.4);padding:3px 10px;border-radius:100px;margin-bottom:10px}
+    .warn h4{font-size:18px;margin-bottom:6px}
+    .warn p{font-size:13.5px;color:#ffc9c9;margin-bottom:16px}
+    .warn .acts{display:flex;gap:9px}
+    .warn .acts button{flex:1;border:0;border-radius:9px;padding:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+    .warn .acts .leave{background:var(--danger);color:#fff}
+    .warn .acts .stay{background:rgba(255,255,255,.08);color:#ffd0d0;border:1px solid var(--border-2)}
+    .float{position:absolute;background:rgba(16,14,38,.92);backdrop-filter:blur(10px);border:1px solid var(--border-2);border-radius:13px;padding:12px 14px;display:flex;align-items:center;gap:11px;box-shadow:0 16px 40px rgba(0,0,0,.45);width:228px}
+    .float .ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .float .ic svg{width:19px;height:19px}
+    .float .t1{font-size:13px;font-weight:700;line-height:1.25}
+    .float .t2{font-size:11.5px;color:var(--faint)}
+    .float.pay{left:-26px;bottom:34px;animation:floaty 5s ease-in-out infinite}
+    .float.pay .ic{background:rgba(61,220,151,.16);color:var(--success)}
+    .float.breach{right:-22px;top:64px;animation:floaty 5.6s ease-in-out infinite .6s}
+    .float.breach .ic{background:rgba(255,183,77,.16);color:var(--warning)}
+    @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+
+    /* trust bar */
+    .trust{padding:30px 0 8px}
+    .trust p{text-align:center;color:var(--faint);font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:20px}
+    .trust-row{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+    .chip{display:inline-flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:9px 18px;color:var(--muted);font-weight:600;font-size:14.5px}
+    .chip .d{width:8px;height:8px;border-radius:50%;background:var(--brand)}
+
+    /* generic section spacing */
+    .pad{padding:96px 0}
+
+    /* problem cards */
+    .prob-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    .prob{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
+    .prob .pic{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;background:rgba(255,255,255,.05)}
+    .prob .pic svg{width:24px;height:24px}
+    .prob h3{font-size:19px;margin-bottom:8px}
+    .prob p{color:var(--muted);font-size:15px}
+
+    /* feature blocks */
+    .feature{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-bottom:108px}
+    .feature:last-child{margin-bottom:0}
+    .feature.flip .feat-text{order:2}
+    .feat-badge{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:700;padding:6px 13px;border-radius:100px;margin-bottom:18px}
+    .feat-badge svg{width:17px;height:17px}
+    .feature h2{font-size:clamp(26px,3.4vw,36px);margin-bottom:16px}
+    .feature .desc{color:var(--muted);font-size:17px;margin-bottom:22px}
+    .flist{list-style:none;display:flex;flex-direction:column;gap:13px}
+    .flist li{display:flex;align-items:flex-start;gap:12px;font-size:15.5px;color:var(--ink)}
+    .flist .tick{flex-shrink:0;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:1px}
+    .flist .tick svg{width:13px;height:13px;color:#fff}
+
+    .c-danger{color:var(--danger)} .bg-danger{background:rgba(255,107,107,.13);border:1px solid rgba(255,107,107,.3);color:var(--danger)}
+    .c-success{color:var(--success)} .bg-success{background:rgba(61,220,151,.13);border:1px solid rgba(61,220,151,.3);color:var(--success)}
+    .c-warning{color:var(--warning)} .bg-warning{background:rgba(255,183,77,.13);border:1px solid rgba(255,183,77,.3);color:var(--warning)}
+    .tick.t-danger{background:var(--danger)}.tick.t-success{background:var(--success)}.tick.t-warning{background:var(--warning)}
+
+    /* feature visual card */
+    .feat-card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--border-2);border-radius:20px;padding:22px;box-shadow:var(--shadow)}
+    .fc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .fc-title{font-size:14px;font-weight:700;color:var(--muted)}
+    .pill{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:4px 11px;border-radius:100px}
+    /* payments list */
+    .pay-row{display:flex;align-items:center;gap:13px;padding:13px 0;border-top:1px solid var(--border)}
+    .pay-row:first-of-type{border-top:0}
+    .pay-logo{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex-shrink:0}
+    .pay-meta{flex:1;min-width:0}
+    .pay-meta .m1{font-weight:700;font-size:15px}
+    .pay-meta .m2{font-size:12.5px;color:var(--faint)}
+    .pay-amt{font-weight:800;font-size:15px}
+    .st{font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;display:inline-block;margin-top:3px}
+    .st.ok{background:rgba(61,220,151,.15);color:var(--success)}
+    .st.wait{background:rgba(255,183,77,.15);color:var(--warning)}
+    .st.no{background:rgba(255,107,107,.15);color:var(--danger)}
+    /* breach card */
+    .breach-box{background:rgba(255,183,77,.06);border:1px solid rgba(255,183,77,.28);border-radius:14px;padding:18px}
+    .breach-box .bh{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+    .breach-box .bh .bi{width:38px;height:38px;border-radius:10px;background:rgba(255,183,77,.16);color:var(--warning);display:flex;align-items:center;justify-content:center}
+    .breach-box .bh .bi svg{width:20px;height:20px}
+    .breach-box h5{font-size:15px}
+    .breach-box .sub{font-size:12.5px;color:var(--faint)}
+    .leak{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+    .leak span{font-size:11.5px;font-weight:600;background:rgba(255,107,107,.13);color:#ffb0b0;border:1px solid rgba(255,107,107,.3);padding:3px 9px;border-radius:6px}
+    .todo-line{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted);padding:6px 0}
+    .todo-line svg{width:15px;height:15px;color:var(--success);flex-shrink:0}
+
+    /* how it works */
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;counter-reset:s}
+    .step{position:relative;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:30px 26px}
+    .step .num{counter-increment:s;font-size:14px;font-weight:800;color:var(--brand);background:rgba(90,162,255,.12);border:1px solid rgba(90,162,255,.25);width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+    .step .num::before{content:counter(s)}
+    .step h3{font-size:18px;margin-bottom:8px}
+    .step p{color:var(--muted);font-size:15px}
+
+    /* demo film */
+    .demo-frame{max-width:980px;margin:0 auto;border-radius:20px;overflow:hidden;border:1px solid var(--border-2);box-shadow:var(--shadow);background:#08071a;position:relative;aspect-ratio:16/9}
+    .demo-stage{position:absolute;inset:0;overflow:hidden}
+    .demo-stage::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(70% 60% at 50% -8%,rgba(124,92,255,.22),transparent 60%),radial-gradient(60% 55% at 110% 115%,rgba(61,220,151,.10),transparent 55%)}
+    /* scenes crossfade */
+    .scene{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:clamp(18px,4vw,54px);padding:clamp(20px,4.5vw,56px);opacity:0;visibility:hidden;transform:scale(.985);transition:opacity .38s ease,transform .42s cubic-bezier(.2,.7,.3,1),visibility .38s}
+    .scene.is-active{opacity:1;visibility:visible;transform:none}
+    .scene.demo-center{flex-direction:column;text-align:center}
+    .scene-split .cap{flex:1 1 46%}
+    @media(max-width:640px){.scene,.scene-split{flex-direction:column;gap:16px}}
+    /* kinetic caption */
+    .cap{max-width:42ch}
+    .cap .k{display:block;font-weight:900;letter-spacing:-.02em;line-height:1.12;font-size:clamp(21px,3.4vw,40px)}
+    .cap .k.wm{font-size:clamp(34px,6vw,60px)}
+    .cap .sub{display:block;margin-top:14px;color:var(--muted);font-weight:500;line-height:1.55;font-size:clamp(13px,1.55vw,17.5px)}
+    .scene .cap .w{display:inline-block;opacity:0;transform:translateY(14px);filter:blur(4px)}
+    .scene.is-active .cap .w{animation:wordIn .42s cubic-bezier(.2,.7,.3,1) forwards;animation-delay:calc(var(--i,0)*42ms)}
+    @keyframes wordIn{to{opacity:1;transform:none;filter:none}}
+    .scene .cap .sub{opacity:0}
+    .scene.is-active .cap .sub{animation:fadeIn .48s ease forwards;animation-delay:var(--subdelay,.4s)}
+    @keyframes fadeIn{to{opacity:1}}
+    /* generic rise-in for rows/visuals */
+    .scene .rise{opacity:0;transform:translateY(16px)}
+    .scene.is-active .rise{animation:riseIn .48s cubic-bezier(.2,.7,.3,1) forwards;animation-delay:var(--d,.12s)}
+    @keyframes riseIn{to{opacity:1;transform:none}}
+    /* phishing modal pop */
+    .scene .warn.pop{opacity:0;transform:translate(-50%,-50%) scale(.9)}
+    .scene.is-active .warn.pop{animation:warnPop .46s cubic-bezier(.2,.85,.25,1) forwards;animation-delay:.5s}
+    @keyframes warnPop{to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+    /* reused cards, sized for the film */
+    .demo-mock{width:min(440px,100%);flex:0 0 auto}
+    .demo-card{width:min(430px,100%);flex:0 0 auto}
+    .demo-title{display:flex;flex-direction:column;align-items:center;gap:14px}
+    .demo-title .logo{width:clamp(52px,8vw,82px);height:auto;filter:drop-shadow(0 8px 22px rgba(108,122,255,.55))}
+    .demo-chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px}
+    /* play poster */
+    .demo-poster{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;text-align:center;padding:24px;cursor:pointer;border:0;font-family:inherit;color:var(--ink);background:radial-gradient(70% 70% at 50% 34%,rgba(124,92,255,.20),transparent 60%),linear-gradient(180deg,#0c0a24,#08071a);transition:opacity .35s ease,visibility .35s}
+    .demo-poster .logo{width:clamp(46px,7vw,66px);height:auto;filter:drop-shadow(0 8px 22px rgba(108,122,255,.55))}
+    .demo-poster .pt{font-size:clamp(18px,2.6vw,26px);font-weight:800;letter-spacing:-.02em}
+    .demo-poster .ps{color:var(--muted);font-size:13.5px;display:inline-flex;align-items:center;gap:7px}
+    .demo-play{width:72px;height:72px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;box-shadow:0 16px 40px rgba(108,122,255,.5);transition:transform .2s ease}
+    .demo-poster:hover .demo-play{transform:scale(1.07)}
+    .demo-play svg{width:30px;height:30px;color:#fff;margin-left:5px}
+    .demo-poster .ps-audio{display:none}
+    .demo-frame.has-audio .demo-poster .ps-captions{display:none}
+    .demo-frame.has-audio .demo-poster .ps-audio{display:inline-flex}
+    .demo-frame.playing .demo-poster,.demo-frame.ended .demo-poster{opacity:0;visibility:hidden;pointer-events:none}
+    /* progress + controls */
+    .demo-ui{position:absolute;left:0;right:0;bottom:0;z-index:6;display:flex;align-items:center;gap:12px;padding:12px 15px;background:linear-gradient(0deg,rgba(8,7,26,.9),transparent);opacity:0;transition:opacity .3s;pointer-events:none}
+    .demo-frame.playing .demo-ui{opacity:1;pointer-events:auto}
+    .demo-track{flex:1;height:4px;border-radius:3px;background:rgba(255,255,255,.16);overflow:hidden}
+    .demo-fill{height:100%;width:0;background:var(--grad);border-radius:3px;transition:width .25s linear}
+    .demo-cc{font-size:12px;color:var(--faint);flex-shrink:0;letter-spacing:.03em;font-variant-numeric:tabular-nums;white-space:nowrap}
+    .demo-mute{display:none;background:rgba(255,255,255,.1);border:1px solid var(--border-2);color:var(--ink);width:34px;height:34px;border-radius:9px;cursor:pointer;align-items:center;justify-content:center;flex-shrink:0}
+    .demo-frame.has-audio .demo-mute{display:flex}
+    .demo-mute:hover{background:rgba(255,255,255,.18)}
+    .demo-mute svg{width:17px;height:17px}
+    .demo-mute .i-off{display:none}
+    .demo-frame.muted .demo-mute .i-on{display:none}
+    .demo-frame.muted .demo-mute .i-off{display:block}
+    /* replay end card */
+    .demo-replay{position:absolute;inset:0;z-index:5;display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;text-align:center;padding:24px;background:radial-gradient(70% 70% at 50% 40%,rgba(124,92,255,.20),transparent 60%),rgba(8,7,26,.9)}
+    .demo-replay .logo{width:54px;height:auto;filter:drop-shadow(0 8px 22px rgba(108,122,255,.55))}
+    .demo-frame.ended .demo-replay{display:flex}
+    @media(max-width:640px){
+      .demo-frame{aspect-ratio:auto;min-height:624px}
+      .scene{justify-content:center;padding:26px 20px}
+      .demo-card,.demo-mock{width:100%;max-width:340px}
+      .cap .k{font-size:clamp(20px,5.4vw,26px)}
+      .cap .sub{font-size:13.5px}
+      .demo-mock .mock-body{min-height:230px}
+    }
+    @media (prefers-reduced-motion:reduce){
+      #demo .scene .cap .w,#demo .scene .cap .sub,#demo .scene .rise,#demo .scene .warn.pop{opacity:1!important;transform:none!important;filter:none!important}
+    }
+
+    /* pricing */
+    .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+    .plan{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:30px 28px;position:relative}
+    .plan.featured{border-color:rgba(124,92,255,.55);background:linear-gradient(180deg,rgba(124,92,255,.12),rgba(255,255,255,.03));box-shadow:0 24px 60px rgba(108,92,255,.22)}
+    .plan .badge-pop{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:5px 14px;border-radius:100px;white-space:nowrap}
+    .plan .pname{font-size:15px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+    .plan .price{font-size:42px;font-weight:900;margin:12px 0 2px;letter-spacing:-.03em}
+    .plan .price small{font-size:16px;font-weight:600;color:var(--faint)}
+    .plan .ptag{color:var(--muted);font-size:14.5px;margin-bottom:20px;min-height:42px}
+    .plan ul{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:26px;flex:1}
+    .plan ul li{display:flex;align-items:flex-start;gap:10px;font-size:14.5px;color:var(--ink)}
+    .plan ul li svg{width:18px;height:18px;color:var(--success);flex-shrink:0;margin-top:2px}
+    .plan ul li.dim{color:var(--faint)}
+    .plan ul li.dim svg{color:var(--faint)}
+    .plan .btn{width:100%}
+    .price-note{text-align:center;color:var(--faint);font-size:14px;margin-top:26px}
+
+    /* privacy */
+    .privacy{background:linear-gradient(180deg,rgba(90,162,255,.07),rgba(124,92,255,.05));border:1px solid var(--border);border-radius:24px;padding:56px 48px}
+    .priv-grid{display:grid;grid-template-columns:1fr 1fr;gap:42px;align-items:center}
+    .priv-list{list-style:none;display:flex;flex-direction:column;gap:18px}
+    .priv-list li{display:flex;gap:14px}
+    .priv-list .pi{flex-shrink:0;width:40px;height:40px;border-radius:11px;background:rgba(90,162,255,.13);color:var(--brand);display:flex;align-items:center;justify-content:center}
+    .priv-list .pi svg{width:21px;height:21px}
+    .priv-list h4{font-size:16px;margin-bottom:3px}
+    .priv-list p{font-size:14px;color:var(--muted)}
+
+    /* faq */
+    .faq{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+    details{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:0 22px;transition:border-color .2s}
+    details[open]{border-color:var(--border-2)}
+    summary{list-style:none;cursor:pointer;padding:20px 0;font-weight:600;font-size:16.5px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    summary::-webkit-details-marker{display:none}
+    summary .pm{width:22px;height:22px;flex-shrink:0;position:relative;transition:transform .25s}
+    summary .pm::before,summary .pm::after{content:"";position:absolute;background:var(--brand);border-radius:2px}
+    summary .pm::before{top:10px;left:3px;width:16px;height:2px}
+    summary .pm::after{top:3px;left:10px;width:2px;height:16px;transition:transform .25s}
+    details[open] summary .pm::after{transform:rotate(90deg)}
+    details .ans{padding:0 0 22px;color:var(--muted);font-size:15.5px}
+    details .ans a{color:var(--brand);text-decoration:underline}
+
+    /* final cta */
+    .final{text-align:center;background:linear-gradient(135deg,rgba(90,162,255,.16),rgba(124,92,255,.16));border:1px solid var(--border-2);border-radius:26px;padding:64px 40px}
+    .final h2{font-size:clamp(30px,4.4vw,46px);margin-bottom:16px}
+    .final p{color:var(--muted);font-size:18px;max-width:540px;margin:0 auto 30px}
+    .final .hero-cta{justify-content:center}
+    .wait{max-width:460px;margin:26px auto 0}
+    .wait form{display:flex;gap:10px}
+    .wait input{flex:1;background:rgba(0,0,0,.3);border:1px solid var(--border-2);border-radius:12px;padding:14px 16px;color:var(--ink);font-family:inherit;font-size:15px}
+    .wait input:focus{outline:none;border-color:var(--brand)}
+    .wait .msg{font-size:14px;margin-top:12px;min-height:20px}
+    .wait .msg.ok{color:var(--success)} .wait .msg.err{color:var(--danger)}
+    .wait small{display:block;color:var(--faint);font-size:13px;margin-top:12px}
+
+    /* footer */
+    .reviews[hidden]{display:none!important}
+    .reviews{padding:30px 0 10px}
+    .rev-summary{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px 26px;margin-bottom:34px}
+    .rev-score{display:flex;align-items:center;gap:11px;font-size:17px;color:var(--muted)}
+    .rev-score b{font-size:23px;color:var(--ink);font-weight:800}
+    .stars{color:#ffc34d;letter-spacing:2px}
+    .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .rev-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+    .rev-card .stars{font-size:15px;display:block;margin-bottom:12px}
+    .rev-card blockquote{font-size:15.5px;line-height:1.5;color:var(--ink);margin:0 0 14px}
+    .rev-card figcaption{font-size:13.5px;color:var(--muted);font-weight:600}
+    @media(max-width:820px){.rev-grid{grid-template-columns:1fr}}
+    footer{border-top:1px solid var(--border);margin-top:96px;padding:54px 0 40px}
+    .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:40px;margin-bottom:40px}
+    .foot-brand .brand{margin-bottom:14px}
+    .foot-brand p{color:var(--muted);font-size:14.5px;max-width:330px}
+    .foot-col h5{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);margin-bottom:16px}
+    .foot-col a{display:block;color:var(--muted);font-size:14.5px;margin-bottom:11px;transition:color .15s}
+    .foot-col a:hover{color:var(--ink)}
+    .foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;padding-top:26px;border-top:1px solid var(--border);color:var(--faint);font-size:13.5px}
+    .foot-social{display:flex;gap:11px;margin-top:20px}
+    .foot-social a{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:11px;background:var(--card);border:1px solid var(--border);color:var(--muted);transition:transform .15s ease,color .15s,border-color .15s,background .15s}
+    .foot-social a:hover{color:var(--ink);transform:translateY(-2px);border-color:rgba(124,92,255,.5);background:rgba(124,92,255,.12)}
+    .foot-social svg{width:20px;height:20px;display:block}
+
+    /* reveal (only when JS active) */
+    html.js .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+    html.js .reveal.in{opacity:1;transform:none}
+
+    /* responsive */
+    @media (max-width:980px){
+      .hero-grid{grid-template-columns:1fr;gap:48px}
+      .hero-visual{max-width:520px;margin:0 auto;width:100%}
+      .feature{grid-template-columns:1fr;gap:34px;margin-bottom:72px}
+      .feature.flip .feat-text{order:0}
+      .priv-grid{grid-template-columns:1fr;gap:30px}
+      .privacy{padding:40px 28px}
+    }
+    @media (max-width:780px){
+      .nav-links,.nav-cta .btn-text{display:none}
+      .menu-btn{display:block}
+      .nav-links.open{display:flex;position:absolute;top:68px;left:0;right:0;flex-direction:column;gap:0;background:rgba(11,10,30,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:8px 24px 18px}
+      .nav-links.open a{padding:13px 0;border-bottom:1px solid var(--border);font-size:16px}
+      .prob-grid,.steps,.price-grid{grid-template-columns:1fr}
+      .pad{padding:72px 0}
+      .foot-grid{grid-template-columns:1fr 1fr}
+      .foot-brand{grid-column:1/-1}
+      .float{display:none}
+      .wait form{flex-direction:column}
+    }
+    @media (max-width:480px){
+      .hero-cta .btn{width:100%}
+      .foot-grid{grid-template-columns:1fr}
+    }
+    @media (prefers-reduced-motion:reduce){
+      *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+      html.js .reveal{opacity:1;transform:none}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BANNER -->
+  <div id="topBanner" class="top-banner" role="region" aria-label="Announcement">
+    <a class="tb-link js-install">
+      <span class="tb-emoji" aria-hidden="true">🎉</span>
+      <span><strong>SafeCart is now live</strong> on the Chrome Web Store — install free</span>
+      <span class="tb-arrow" aria-hidden="true">→</span>
+    </a>
+    <button class="tb-close" id="tbClose" type="button" aria-label="Dismiss announcement">×</button>
+  </div>
+
+  <!-- NAV -->
+  <header class="nav" id="nav">
+    <div class="wrap nav-inner">
+      <a href="#top" class="brand" aria-label="SafeCart home">
+        <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
+          <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5aa2ff"/><stop offset="1" stop-color="#7c5cff"/></linearGradient></defs>
+          <path d="M24 3 L40 9 L40 19 C40 30 33 37 24 42 C15 37 8 30 8 19 L8 9 Z" fill="url(#lg)"/>
+          <path d="M16.5 23 L21.5 28 L31 17" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        SafeCart
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div class="nav-cta">
+        <a href="#demo" class="btn btn-ghost btn-sm btn-text">Watch demo</a>
+        <a class="btn btn-primary btn-sm js-install">Add to Chrome</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-text">
+          <span class="eyebrow"><span class="dot"></span> Free Chrome extension · Privacy-first</span>
+          <h1>Your shopping safety net for the <span class="gradient-text">internet</span>.</h1>
+          <p class="lead">SafeCart warns you before you type your card on a fake checkout, keeps a private log of every purchase, and tells you the moment a store you shop at is breached.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary js-install">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 4.5l3.9 6.75H8.1L12 6.5zM7.2 8.4L3.3 15a10 10 0 004.46 4.9l3.9-6.75-4.46-4.75zm9.6 0l-4.46 4.75 3.9 6.75A10 10 0 0020.7 15l-3.9-6.6z"/></svg>
+              Add to Chrome — it's free
+            </a>
+            <a href="#demo" class="btn btn-ghost">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+              Watch 60-sec demo
+            </a>
+          </div>
+          <div class="hero-micro">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Works on every checkout</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> No account required</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> No ads, ever</span>
+          </div>
+          <div class="hero-follow">
+            <span class="lbl">New scam teardown daily →</span>
+            <div class="foot-social">
+              <a href="https://www.youtube.com/@SafeCart0_0" target="_blank" rel="noopener" aria-label="SafeCart on YouTube" title="Daily scam teardowns on YouTube"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.12-2.12C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.58A3 3 0 0 0 .5 6.2 31.2 31.2 0 0 0 0 12a31.2 31.2 0 0 0 .5 5.8 3 3 0 0 0 2.12 2.12C4.5 20.5 12 20.5 12 20.5s7.5 0 9.38-.58A3 3 0 0 0 23.5 17.8 31.2 31.2 0 0 0 24 12a31.2 31.2 0 0 0-.5-5.8zM9.6 15.6V8.4l6.25 3.6z"/></svg></a>
+              <a href="https://www.instagram.com/safecartt" target="_blank" rel="noopener" aria-label="SafeCart on Instagram" title="Daily scam teardowns on Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1.05" fill="currentColor" stroke="none"/></svg></a>
+              <a href="https://www.tiktok.com/@safecart7" target="_blank" rel="noopener" aria-label="SafeCart on TikTok" title="Daily scam teardowns on TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5 2.59 2.59 0 0 1-.27-5.17V9.6a5.66 5.66 0 0 0-5.39 5.65 5.66 5.66 0 0 0 11.32 0V9.01a7.3 7.3 0 0 0 4.27 1.37V7.3a4.28 4.28 0 0 1-3.19-1.48z"/></svg></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal">
+          <div class="mock">
+            <div class="mock-bar">
+              <div class="dots"><i></i><i></i><i></i></div>
+              <div class="urlbar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                amaz0n-checkout-secure.xyz
+              </div>
+            </div>
+            <div class="mock-body">
+              <div class="ghost-form" aria-hidden="true">
+                <div class="row s"></div>
+                <div class="field"></div>
+                <div class="row m"></div>
+                <div class="field"></div>
+                <div class="row s"></div>
+                <div class="field"></div>
+              </div>
+              <div class="warn" role="alert">
+                <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-3z" stroke-linejoin="round"/><path d="M12 8v4m0 4h.01" stroke-linecap="round"/></svg>
+                <span class="tag">⚠ Dangerous site</span>
+                <h4>This looks like a phishing scam</h4>
+                <p>The domain mimics a known brand and was registered 4 days ago. SafeCart locked the card field.</p>
+                <div class="acts">
+                  <button class="leave">Get me out</button>
+                  <button class="stay">Trust anyway</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="float pay">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><div class="t1">Payment tracked</div><div class="t2">Amazon · $42.99 · just now</div></div>
+          </div>
+          <div class="float breach">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><div class="t1">Breach alert</div><div class="t2">A store you shop at · change password</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUST -->
+    <section class="trust">
+      <div class="wrap">
+        <p>Powered by data you already trust</p>
+        <div class="trust-row">
+          <span class="chip"><span class="d"></span> Google Safe Browsing</span>
+          <span class="chip"><span class="d"></span> PhishTank</span>
+          <span class="chip"><span class="d"></span> Have I Been Pwned</span>
+          <span class="chip"><span class="d"></span> RDAP domain age</span>
+          <span class="chip"><span class="d"></span> Stripe billing</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROBLEM -->
+    <section class="pad">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>Online shopping has a trust problem</h2>
+          <p>Three things go wrong when you shop online — and you usually find out too late.</p>
+        </div>
+        <div class="prob-grid">
+          <div class="prob reveal">
+            <div class="pic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2"><path d="M12 3l8 3v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-3z" stroke-linejoin="round"/><path d="M9.5 12l1.8 1.8L15 10" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <h3>Fake stores look real now</h3>
+            <p>A one-character typo in the URL, a fresh domain, a perfect-looking checkout — and your card details are gone before you notice.</p>
+          </div>
+          <div class="prob reveal">
+            <div class="pic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg></div>
+            <h3>Receipts vanish</h3>
+            <p>Did that order actually go through? Confirmation emails get buried, and you only remember when the charge — or the missing package — shows up.</p>
+          </div>
+          <div class="prob reveal">
+            <div class="pic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2"><path d="M12 3l8 3v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-3z" stroke-linejoin="round"/><path d="M12 8v4m0 4h.01" stroke-linecap="round"/></svg></div>
+            <h3>Breaches happen weekly</h3>
+            <p>Stores you bought from once get hacked all the time. By the time you hear about it, your reused password is already out there.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="pad" id="features">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>One extension. Three layers of protection.</h2>
+          <p>Silent on safe sites. It only steps in when something's actually wrong.</p>
+        </div>
+
+        <!-- Feature 1 -->
+        <div class="feature reveal">
+          <div class="feat-text">
+            <span class="feat-badge bg-danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-3z" stroke-linejoin="round"/></svg> Phishing protection</span>
+            <h2>Catch fake checkouts before they catch you</h2>
+            <p class="desc">The moment you reach a checkout page, SafeCart scores it against Google Safe Browsing, PhishTank, domain age, and a dozen lookalike-detection rules. If something's off, it locks the card field and shows a clear warning — <strong>before</strong> you type a single digit.</p>
+            <ul class="flist">
+              <li><span class="tick t-danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Detects brand typos &amp; freshly-registered domains</li>
+              <li><span class="tick t-danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Real-time Google Safe Browsing &amp; PhishTank checks</li>
+              <li><span class="tick t-danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> A curated allowlist so real stores never get flagged</li>
+            </ul>
+          </div>
+          <div class="feat-card">
+            <div class="fc-head"><span class="fc-title">checkout-secure.xyz</span><span class="pill bg-danger">Risk 92 / 100</span></div>
+            <div class="breach-box" style="background:rgba(255,107,107,.06);border-color:rgba(255,107,107,.28)">
+              <div class="bh"><div class="bi" style="background:rgba(255,107,107,.16);color:var(--danger)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-3z" stroke-linejoin="round"/><path d="M12 8v4m0 4h.01" stroke-linecap="round"/></svg></div><div><h5>Dangerous checkout blocked</h5><div class="sub">Card field locked</div></div></div>
+              <div class="todo-line"><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg> Flagged by Google Safe Browsing</div>
+              <div class="todo-line"><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg> Domain registered 4 days ago</div>
+              <div class="todo-line"><svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg> Mimics a well-known brand name</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature flip reveal">
+          <div class="feat-text">
+            <span class="feat-badge bg-success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20" stroke-linecap="round"/></svg> Payment tracking</span>
+            <h2>Every purchase, quietly logged</h2>
+            <p class="desc">Click "Buy" on a real store and SafeCart records the order automatically — locally, on your device. If a confirmation email doesn't arrive, you get a nudge with a ready-to-send chargeback template and the merchant's real support contact.</p>
+            <ul class="flist">
+              <li><span class="tick t-success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> One private ledger of everything you buy online</li>
+              <li><span class="tick t-success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Catches orders with no confirmation email</li>
+              <li><span class="tick t-success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> One-click chargeback help when something goes wrong</li>
+            </ul>
+          </div>
+          <div class="feat-card">
+            <div class="fc-head"><span class="fc-title">Recent purchases</span><span class="pill bg-success">3 tracked</span></div>
+            <div class="pay-row"><div class="pay-logo">A</div><div class="pay-meta"><div class="m1">Amazon</div><div class="m2">Jan 15 · 2:41 PM</div></div><div style="text-align:right"><div class="pay-amt">$42.99</div><span class="st ok">Confirmed</span></div></div>
+            <div class="pay-row"><div class="pay-logo">S</div><div class="pay-meta"><div class="m1">Shopify store</div><div class="m2">Jan 14 · 7:08 PM</div></div><div style="text-align:right"><div class="pay-amt">$18.50</div><span class="st wait">Pending</span></div></div>
+            <div class="pay-row"><div class="pay-logo">E</div><div class="pay-meta"><div class="m1">Etsy seller</div><div class="m2">Jan 12 · 11:02 AM</div></div><div style="text-align:right"><div class="pay-amt">$67.00</div><span class="st no">No receipt</span></div></div>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature reveal">
+          <div class="feat-text">
+            <span class="feat-badge bg-warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z" stroke-linecap="round" stroke-linejoin="round"/></svg> Breach alerts</span>
+            <h2>Know the hour a store you shop at is breached</h2>
+            <p class="desc">SafeCart checks the stores you've actually visited against Have I Been Pwned. If one shows up in a breach, you'll know which store, exactly what data leaked, and what to do next — change a password, replace a card, freeze your credit.</p>
+            <ul class="flist">
+              <li><span class="tick t-warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Monitors only the stores you've shopped at</li>
+              <li><span class="tick t-warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Tells you exactly what leaked, in plain language</li>
+              <li><span class="tick t-warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> A clear "what to do next" checklist for each breach</li>
+            </ul>
+          </div>
+          <div class="feat-card">
+            <div class="fc-head"><span class="fc-title">Breach monitor</span><span class="pill bg-warning">1 alert</span></div>
+            <div class="breach-box">
+              <div class="bh"><div class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h5>A store you shop at was breached</h5><div class="sub">Detected today · 4.2M accounts</div></div></div>
+              <div class="leak"><span>Email addresses</span><span>Passwords</span><span>Names</span></div>
+              <div class="todo-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Change your password there now</div>
+              <div class="todo-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Update it anywhere you reused it</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="pad" id="how">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>Set it once. Forget it's there.</h2>
+          <p>No configuration, no dashboards to babysit. SafeCart works the second it's installed.</p>
+        </div>
+        <div class="steps">
+          <div class="step reveal"><div class="num"></div><h3>Install in one click</h3><p>Add SafeCart from the Chrome Web Store. Default settings cover almost everyone — no account needed to start.</p></div>
+          <div class="step reveal"><div class="num"></div><h3>Shop like you always do</h3><p>SafeCart stays invisible on safe sites. It only appears when a checkout looks risky or a purchase needs your attention.</p></div>
+          <div class="step reveal"><div class="num"></div><h3>Stay protected automatically</h3><p>Purchases get logged, breaches get checked daily, and you get a heads-up the moment anything matters.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEMO (on-site animated film) -->
+    <section class="pad" id="demo">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>See SafeCart in action</h2>
+          <p>A 60-second walkthrough — phishing block, payment log, and breach alerts. Plays right here, no sound needed.</p>
+        </div>
+
+        <div class="demo-frame reveal" id="demoFilm">
+          <div class="demo-stage">
+
+            <!-- S1 · Title -->
+            <div class="scene demo-center is-active">
+              <div class="demo-title">
+                <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
+                  <defs><linearGradient id="lg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5aa2ff"/><stop offset="1" stop-color="#7c5cff"/></linearGradient></defs>
+                  <path d="M24 3 L40 9 L40 19 C40 30 33 37 24 42 C15 37 8 30 8 19 L8 9 Z" fill="url(#lg3)"/>
+                  <path d="M16.5 23 L21.5 28 L31 17" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div class="cap" style="--subdelay:.5s">
+                  <span class="k wm">SafeCart</span>
+                  <span class="sub">Your shopping safety net for the internet.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- S2 · Phishing -->
+            <div class="scene scene-split">
+              <div class="cap" style="--subdelay:.6s">
+                <span class="k">Spot fake checkouts before you type a digit.</span>
+                <span class="sub">SafeCart scores every checkout in real time — and locks the card field the instant it looks like a scam.</span>
+              </div>
+              <div class="mock demo-mock">
+                <div class="mock-bar">
+                  <div class="dots"><i></i><i></i><i></i></div>
+                  <div class="urlbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>amaz0n-checkout-secure.xyz</div>
+                </div>
+                <div class="mock-body">
+                  <div class="ghost-form" aria-hidden="true"><div class="row s"></div><div class="field"></div><div class="row m"></div><div class="field"></div><div class="row s"></div><div class="field"></div></div>
+                  <div class="warn pop" role="alert">
+                    <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-3z" stroke-linejoin="round"/><path d="M12 8v4m0 4h.01" stroke-linecap="round"/></svg>
+                    <span class="tag">⚠ Dangerous site</span>
+                    <h4>This looks like a phishing scam</h4>
+                    <p>The domain mimics a known brand and was registered 4 days ago. SafeCart locked the card field.</p>
+                    <div class="acts"><button class="leave">Get me out</button><button class="stay">Trust anyway</button></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- S3 · Payments -->
+            <div class="scene scene-split">
+              <div class="feat-card demo-card">
+                <div class="fc-head"><span class="fc-title">Recent purchases</span><span class="pill bg-success">3 tracked</span></div>
+                <div class="pay-row rise" style="--d:.18s"><div class="pay-logo">A</div><div class="pay-meta"><div class="m1">Amazon</div><div class="m2">Jan 15 · 2:41 PM</div></div><div style="text-align:right"><div class="pay-amt">$42.99</div><span class="st ok">Confirmed</span></div></div>
+                <div class="pay-row rise" style="--d:.32s"><div class="pay-logo">S</div><div class="pay-meta"><div class="m1">Shopify store</div><div class="m2">Jan 14 · 7:08 PM</div></div><div style="text-align:right"><div class="pay-amt">$18.50</div><span class="st wait">Pending</span></div></div>
+                <div class="pay-row rise" style="--d:.46s"><div class="pay-logo">E</div><div class="pay-meta"><div class="m1">Etsy seller</div><div class="m2">Jan 12 · 11:02 AM</div></div><div style="text-align:right"><div class="pay-amt">$67.00</div><span class="st no">No receipt</span></div></div>
+              </div>
+              <div class="cap" style="--subdelay:.55s">
+                <span class="k">Every purchase, quietly logged.</span>
+                <span class="sub">On your device — never our servers. If a receipt never shows up, SafeCart nudges you with one-click chargeback help.</span>
+              </div>
+            </div>
+
+            <!-- S4 · Breach -->
+            <div class="scene scene-split">
+              <div class="cap" style="--subdelay:.6s">
+                <span class="k">Know the hour a store you shop at is breached.</span>
+                <span class="sub">We check the stores you actually visit against Have I Been Pwned — then tell you exactly what to do next.</span>
+              </div>
+              <div class="feat-card demo-card">
+                <div class="fc-head"><span class="fc-title">Breach monitor</span><span class="pill bg-warning">1 alert</span></div>
+                <div class="breach-box">
+                  <div class="bh"><div class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h5>A store you shop at was breached</h5><div class="sub">Detected today · 4.2M accounts</div></div></div>
+                  <div class="leak rise" style="--d:.22s"><span>Email addresses</span><span>Passwords</span><span>Names</span></div>
+                  <div class="todo-line rise" style="--d:.34s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Change your password there now</div>
+                  <div class="todo-line rise" style="--d:.44s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Update it anywhere you reused it</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- S5 · Privacy -->
+            <div class="scene demo-center">
+              <div class="cap" style="--subdelay:.55s;text-align:center;max-width:32ch">
+                <span class="k">All of it runs in your browser.</span>
+                <span class="sub">No accounts. No trackers. No data sales. Your information never leaves your device.</span>
+                <div class="demo-chips">
+                  <span class="chip rise" style="--d:.3s"><span class="d"></span> 0 trackers</span>
+                  <span class="chip rise" style="--d:.42s"><span class="d"></span> 0 data sales</span>
+                  <span class="chip rise" style="--d:.54s"><span class="d"></span> 100% on-device</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- S6 · CTA -->
+            <div class="scene demo-center">
+              <div class="demo-title">
+                <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
+                  <path d="M24 3 L40 9 L40 19 C40 30 33 37 24 42 C15 37 8 30 8 19 L8 9 Z" fill="url(#lg3)"/>
+                  <path d="M16.5 23 L21.5 28 L31 17" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div class="cap" style="--subdelay:.45s">
+                  <span class="k">Add SafeCart — it's free.</span>
+                  <span class="sub">Works on every checkout. No account required.</span>
+                </div>
+                <a class="btn btn-primary js-install rise" style="--d:.45s;margin-top:6px">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 4.5l3.9 6.75H8.1L12 6.5zM7.2 8.4L3.3 15a10 10 0 004.46 4.9l3.9-6.75-4.46-4.75zm9.6 0l-4.46 4.75 3.9 6.75A10 10 0 0020.7 15l-3.9-6.6z"/></svg>
+                  Add to Chrome — it's free
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- progress + controls -->
+          <div class="demo-ui">
+            <span class="demo-cc" id="demoCC">1 / 6 · Intro</span>
+            <div class="demo-track"><div class="demo-fill" id="demoFill"></div></div>
+            <button class="demo-mute" id="demoMute" type="button" aria-label="Mute or unmute voiceover">
+              <svg class="i-on" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 00-2.5-4.02v8.04A4.5 4.5 0 0016.5 12zM14 3.23v2.06a7 7 0 010 13.42v2.06a9 9 0 000-17.54z"/></svg>
+              <svg class="i-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor" stroke="none"/><path d="M16 9l5 6M21 9l-5 6"/></svg>
+            </button>
+          </div>
+
+          <!-- play poster -->
+          <button class="demo-poster" id="demoPoster" type="button" aria-label="Play the SafeCart demo">
+            <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M24 3 L40 9 L40 19 C40 30 33 37 24 42 C15 37 8 30 8 19 L8 9 Z" fill="url(#lg3)"/>
+              <path d="M16.5 23 L21.5 28 L31 17" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="demo-play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="pt">Watch the 60-second demo</span>
+            <span class="ps ps-captions">Captioned · plays right here, no sound needed</span>
+            <span class="ps ps-audio">🔊 With voiceover · captions on screen</span>
+          </button>
+
+          <!-- replay end card -->
+          <div class="demo-replay" id="demoReplay">
+            <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M24 3 L40 9 L40 19 C40 30 33 37 24 42 C15 37 8 30 8 19 L8 9 Z" fill="url(#lg3)"/>
+              <path d="M16.5 23 L21.5 28 L31 17" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="cap" style="text-align:center"><span class="k" style="font-size:clamp(20px,3vw,30px)">Shop without the second-guessing.</span></div>
+            <div class="hero-cta" style="justify-content:center;margin-bottom:0">
+              <a class="btn btn-primary js-install">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 4.5l3.9 6.75H8.1L12 6.5zM7.2 8.4L3.3 15a10 10 0 004.46 4.9l3.9-6.75-4.46-4.75zm9.6 0l-4.46 4.75 3.9 6.75A10 10 0 0020.7 15l-3.9-6.6z"/></svg>
+                Add to Chrome — it's free
+              </a>
+              <button class="btn btn-ghost demo-again" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 109-9 9 9 0 00-7 3.3M3 3v4h4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Replay
+              </button>
+            </div>
+          </div>
+
+          <!-- Optional voiceover: drop website/demo-vo.mp3 next to index.html and it activates automatically. -->
+          <audio id="demoVO" preload="auto" playsinline><source src="demo-vo.mp3" type="audio/mpeg" /></audio>
+          <!-- Optional background music: drop website/demo-music.mp3 next to index.html; loops softly under the voice. -->
+          <audio id="demoMusic" preload="auto" loop playsinline><source src="demo-music.mp3" type="audio/mpeg" /></audio>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pad" id="pricing">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>Simple pricing. No ads. No data sales.</h2>
+          <p>The core protection is free forever. Upgrade only if you want the extras.</p>
+        </div>
+        <div class="price-grid">
+          <div class="plan reveal">
+            <div class="pname">Free</div>
+            <div class="price">$0</div>
+            <div class="ptag">Everything you need to shop safely.</div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Phishing detection on every checkout</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Local-only purchase tracking</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Daily breach scan of your stores</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Chargeback help &amp; support contacts</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> No ads. Ever.</li>
+            </ul>
+            <a class="btn btn-ghost js-install">Add to Chrome</a>
+          </div>
+
+          <div class="plan featured reveal">
+            <span class="badge-pop">Most popular</span>
+            <div class="pname">Premium</div>
+            <div class="price">$2.49<small>/mo</small></div>
+            <div class="ptag">For people who shop online every week.</div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Everything in Free</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Auto-match receipts in Gmail</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Priority breach alerts within 1 hour</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Sync history across all your Chromes</li>
+            </ul>
+            <a class="btn btn-primary js-install">Start with Premium</a>
+          </div>
+
+          <div class="plan reveal">
+            <div class="pname">Family</div>
+            <div class="price">$4.99<small>/mo</small></div>
+            <div class="ptag">Protect everyone under one roof.</div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Everything in Premium</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Covers up to 5 people</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Shared chargeback help</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> One bill for the whole household</li>
+            </ul>
+            <a class="btn btn-ghost js-install">Get Family</a>
+          </div>
+        </div>
+        <p class="price-note">Subscriptions are optional and billed securely through Stripe. Cancel anytime from the extension.</p>
+      </div>
+    </section>
+
+    <!-- PRIVACY -->
+    <section class="pad" id="privacy">
+      <div class="wrap">
+        <div class="privacy reveal">
+          <div class="priv-grid">
+            <div>
+              <span class="eyebrow"><span class="dot"></span> Privacy you can verify</span>
+              <h2 style="font-size:clamp(26px,3.4vw,36px);margin:18px 0 14px">Your data stays on your device</h2>
+              <p class="muted" style="font-size:17px;margin-bottom:24px">SafeCart was built privacy-first. The sensitive work happens inside your browser — not on our servers.</p>
+              <a href="https://hewzijian.github.io/safecart-privacy/" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">Read the full privacy policy →</a>
+            </div>
+            <ul class="priv-list">
+              <li><div class="pi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3" stroke-linecap="round"/></svg></div><div><h4>Gmail reads stay in your browser</h4><p>Receipt matching uses your own Gmail token, on-device. No email content ever reaches our servers.</p></div></li>
+              <li><div class="pi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-3z" stroke-linejoin="round"/></svg></div><div><h4>No API keys in your copy</h4><p>Phishing checks route through a thin proxy, so your extension never carries third-party keys.</p></div></li>
+              <li><div class="pi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18 15 15 0 010-18z"/></svg></div><div><h4>Breach checks send only domains</h4><p>We look up public store domains like "example.com" — never your email, password, or anything that identifies you.</p></div></li>
+              <li><div class="pi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg></div><div><h4>No ads, no trackers, no sales</h4><p>There are no analytics SDKs in the extension and we never sell or share your data. Full stop.</p></div></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="pad" id="faq">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>Frequently asked questions</h2>
+          <p>Everything else you might be wondering before you install.</p>
+        </div>
+        <div class="faq reveal">
+          <details><summary>Is SafeCart really free?<span class="pm"></span></summary><div class="ans">Yes. Phishing detection, purchase tracking, daily breach scans, and chargeback help are free forever, with no ads. Premium ($2.49/mo) and Family ($4.99/mo) are optional and only add Gmail receipt matching, faster breach alerts, and cross-device sync.</div></details>
+          <details><summary>Can SafeCart see my card number or passwords?<span class="pm"></span></summary><div class="ans">No. SafeCart never reads or transmits your card details or passwords. It detects when a card field is present so it can warn you on risky pages — but the numbers you type never leave the page, and card payments for subscriptions are handled entirely by Stripe.</div></details>
+          <details><summary>Will it slow down my browsing or flag real stores?<span class="pm"></span></summary><div class="ans">No. SafeCart returns a fast local verdict first and caches results, so there's no noticeable lag. A curated allowlist of well-known retailers keeps legitimate stores from being false-flagged.</div></details>
+          <details><summary>What data actually leaves my device?<span class="pm"></span></summary><div class="ans">Very little. Phishing checks send the checkout URL to a privacy-preserving proxy; breach checks send only public store domains. Purchases are stored locally. Gmail receipt-matching (Premium) runs in your browser. You can read the exact details in the <a href="https://hewzijian.github.io/safecart-privacy/" target="_blank" rel="noopener">privacy policy</a>.</div></details>
+          <details><summary>Which browsers are supported?<span class="pm"></span></summary><div class="ans">SafeCart runs on Google Chrome and other Chromium-based browsers (it's built on Manifest V3). Microsoft Edge support is on the way.</div></details>
+          <details><summary>How do I cancel a subscription?<span class="pm"></span></summary><div class="ans">Open the SafeCart popup, go to your subscription, and click "Manage subscription" to open the Stripe billing portal. You can cancel anytime and keep all the free features.</div></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="pad">
+      <div class="wrap">
+        <div class="final reveal">
+          <h2>Shop online without the second-guessing</h2>
+          <p>Add SafeCart in one click and let it watch your back at every checkout — for free.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary js-install">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 4.5l3.9 6.75H8.1L12 6.5zM7.2 8.4L3.3 15a10 10 0 004.46 4.9l3.9-6.75-4.46-4.75zm9.6 0l-4.46 4.75 3.9 6.75A10 10 0 0020.7 15l-3.9-6.6z"/></svg>
+              Add to Chrome — it's free
+            </a>
+            <a href="#demo" class="btn btn-ghost">Watch the demo</a>
+          </div>
+          <div class="wait">
+            <form id="waitForm" novalidate>
+              <input type="email" id="waitEmail" placeholder="you@email.com" aria-label="Email address" required />
+              <button type="submit" class="btn btn-primary">Keep me posted</button>
+            </form>
+            <div class="msg" id="waitMsg" role="status"></div>
+            <small>No spam — just product updates and new-feature news.</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVIEWS — HIDDEN until you have real reviews.
+         To turn on: (1) delete the `hidden` attribute on the <section> below.
+         (2) Replace each .rev-card's [bracketed] text with a REAL review — never invent reviews.
+         (3) Update the ★ rating + number to match your live Chrome Web Store score.
+         The "Rate us" button auto-links to your store's reviews page. -->
+    <section id="reviews" class="reviews" hidden aria-label="Reviews">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>What people are saying</h2>
+          <p>Real reviews from people who shop safer with SafeCart.</p>
+        </div>
+        <div class="rev-summary">
+          <span class="rev-score"><span class="stars">★★★★★</span> <b>4.9</b> on the Chrome Web Store</span>
+          <a class="btn btn-primary js-review">★ Rate us on the Chrome Web Store</a>
+        </div>
+        <div class="rev-grid">
+          <figure class="rev-card"><span class="stars">★★★★★</span><blockquote>[Paste a real review here.]</blockquote><figcaption>— [Reviewer], Chrome Web Store</figcaption></figure>
+          <figure class="rev-card"><span class="stars">★★★★★</span><blockquote>[Paste a real review here.]</blockquote><figcaption>— [Reviewer], Chrome Web Store</figcaption></figure>
+          <figure class="rev-card"><span class="stars">★★★★★</span><blockquote>[Paste a real review here.]</blockquote><figcaption>— [Reviewer], Chrome Web Store</figcaption></figure>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <a href="#top" class="brand">
+            <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
+              <defs><linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5aa2ff"/><stop offset="1" stop-color="#7c5cff"/></linearGradient></defs>
+              <path d="M24 3 L40 9 L40 19 C40 30 33 37 24 42 C15 37 8 30 8 19 L8 9 Z" fill="url(#lg2)"/>
+              <path d="M16.5 23 L21.5 28 L31 17" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            SafeCart
+          </a>
+          <p>Your shopping safety net for the internet. Phishing protection, payment tracking, and breach alerts — in one free Chrome extension.</p>
+          <div class="foot-social" aria-label="Follow SafeCart">
+            <a href="https://www.youtube.com/@SafeCart0_0" target="_blank" rel="noopener" aria-label="SafeCart on YouTube" title="Daily scam teardowns on YouTube">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.12-2.12C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.58A3 3 0 0 0 .5 6.2 31.2 31.2 0 0 0 0 12a31.2 31.2 0 0 0 .5 5.8 3 3 0 0 0 2.12 2.12C4.5 20.5 12 20.5 12 20.5s7.5 0 9.38-.58A3 3 0 0 0 23.5 17.8 31.2 31.2 0 0 0 24 12a31.2 31.2 0 0 0-.5-5.8zM9.6 15.6V8.4l6.25 3.6z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/safecartt" target="_blank" rel="noopener" aria-label="SafeCart on Instagram" title="Daily scam teardowns on Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1.05" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@safecart7" target="_blank" rel="noopener" aria-label="SafeCart on TikTok" title="Daily scam teardowns on TikTok">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5 2.59 2.59 0 0 1-.27-5.17V9.6a5.66 5.66 0 0 0-5.39 5.65 5.66 5.66 0 0 0 11.32 0V9.01a7.3 7.3 0 0 0 4.27 1.37V7.3a4.28 4.28 0 0 1-3.19-1.48z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="foot-col">
+          <h5>Product</h5>
+          <a href="#features">Features</a>
+          <a href="#how">How it works</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#demo">Demo</a>
+        </div>
+        <div class="foot-col">
+          <h5>Resources</h5>
+          <a class="js-install">Chrome Web Store</a>
+          <a href="/scam-guide">Scam guide</a>
+          <a class="js-review">★ Leave a review</a>
+          <a href="https://hewzijian.github.io/safecart-privacy/" target="_blank" rel="noopener">Privacy policy</a>
+          <a href="#faq">FAQ</a>
+          <a href="#privacy">Your data</a>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© <span id="year"></span> SafeCart. Built for safer shopping.</span>
+        <span>Built solo · An indie project · Privacy-first</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ============================================================
+       CONFIG — edit these two lines, then redeploy.
+       ============================================================ */
+    // Paste your live Chrome Web Store listing URL here (the one that opens your extension's page).
+    // Until then, install buttons point to a Web Store search for "safecart" so nothing 404s.
+    const CHROME_STORE_URL = "https://chromewebstore.google.com/detail/safecart/cljpoelnlljioahkhgiplbbgkacebech";
+    // OPTIONAL: paste a Tally/Formspree/your-own endpoint to collect waitlist emails.
+    // Leave "" to keep the form in friendly demo mode (validates + thanks, no network call).
+    const WAITLIST_ENDPOINT = "https://formspree.io/f/xjgzdkkv";
+    /* ============================================================ */
+
+    // Wire every "Add to Chrome" button to the store URL.
+    document.querySelectorAll('.js-install').forEach(function (el) {
+      el.setAttribute('href', CHROME_STORE_URL);
+      el.setAttribute('target', '_blank');
+      el.setAttribute('rel', 'noopener');
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', function () {
+        if (window.gtag) gtag('event', 'install_click', { location: el.closest('section') ? el.closest('section').id || 'nav' : 'nav' });
+      });
+    });
+
+    // Wire "Rate us / Leave a review" buttons to the Chrome Web Store reviews tab.
+    document.querySelectorAll('.js-review').forEach(function (el) {
+      el.setAttribute('href', CHROME_STORE_URL.replace(/\/+$/, '') + '/reviews');
+      el.setAttribute('target', '_blank');
+      el.setAttribute('rel', 'noopener');
+      el.style.cursor = 'pointer';
+    });
+
+    // Sticky nav shadow on scroll
+    var nav = document.getElementById('nav');
+    function onScroll(){ nav.classList.toggle('scrolled', window.scrollY > 8); }
+    onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Mobile menu
+    var menuBtn = document.getElementById('menuBtn');
+    var navLinks = document.getElementById('navLinks');
+    menuBtn.addEventListener('click', function () {
+      var open = navLinks.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    navLinks.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () { navLinks.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); });
+    });
+
+    // Top banner dismiss (persisted in localStorage)
+    var banner = document.getElementById('topBanner');
+    var tbClose = document.getElementById('tbClose');
+    if (banner && tbClose) {
+      try { if (localStorage.getItem('sc_banner_dismissed') === '1') banner.classList.add('hidden'); } catch (_) {}
+      tbClose.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        banner.classList.add('hidden');
+        try { localStorage.setItem('sc_banner_dismissed', '1'); } catch (_) {}
+        if (window.gtag) gtag('event', 'banner_dismiss');
+      });
+    }
+
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Scroll-reveal (with safe fallbacks)
+    var reveals = document.querySelectorAll('.reveal');
+    function revealAll(){ reveals.forEach(function (r){ r.classList.add('in'); }); }
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      reveals.forEach(function (r) { io.observe(r); });
+      // safety net in case something doesn't fire
+      setTimeout(revealAll, 1600);
+    } else {
+      revealAll();
+    }
+
+    // Waitlist form
+    var form = document.getElementById('waitForm');
+    var email = document.getElementById('waitEmail');
+    var msg = document.getElementById('waitMsg');
+    var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var val = (email.value || '').trim();
+      if (!EMAIL_RE.test(val)) { msg.textContent = 'Please enter a valid email address.'; msg.className = 'msg err'; return; }
+      if (window.gtag) gtag('event', 'waitlist_signup');
+      function done(){ msg.textContent = "You're on the list — thanks! We'll be in touch."; msg.className = 'msg ok'; form.reset(); }
+      if (WAITLIST_ENDPOINT) {
+        msg.textContent = 'Adding you…'; msg.className = 'msg';
+        fetch(WAITLIST_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify({ email: val }) })
+          .then(function (r) { if (!r.ok) throw new Error('bad'); done(); })
+          .catch(function () { msg.textContent = "Couldn't reach the server — try again in a moment."; msg.className = 'msg err'; });
+      } else {
+        done();
+      }
+    });
+
+    /* ============================================================
+       On-site demo film — scene timeline synced to an optional
+       voiceover. Plays on click (autoplay-policy safe). If
+       website/demo-vo.mp3 exists it drives the clock + plays sound;
+       otherwise a JS timer runs the same captioned timeline.
+       ============================================================ */
+    (function () {
+      var frame = document.getElementById('demoFilm');
+      if (!frame) return;
+      var poster  = document.getElementById('demoPoster');
+      var replay  = document.getElementById('demoReplay');
+      var fill    = document.getElementById('demoFill');
+      var ccLabel = document.getElementById('demoCC');
+      var muteBtn = document.getElementById('demoMute');
+      var audio   = document.getElementById('demoVO');
+      var music   = document.getElementById('demoMusic');
+      var sceneEls = Array.prototype.slice.call(frame.querySelectorAll('.scene'));
+
+      // Split each headline into word spans for the kinetic reveal.
+      frame.querySelectorAll('.scene .k').forEach(function (el) {
+        var words = el.textContent.trim().split(/\s+/);
+        el.textContent = '';
+        words.forEach(function (w, i) {
+          var s = document.createElement('span');
+          s.className = 'w'; s.style.setProperty('--i', i); s.textContent = w;
+          el.appendChild(s); el.appendChild(document.createTextNode(' '));
+        });
+      });
+
+      // Scene start times (seconds). Authored to the ~52s voiceover script.
+      var scenes = [
+        { start: 0.0,  label: 'Intro' },
+        { start: 6.0,  label: 'Phishing protection' },
+        { start: 17.0, label: 'Payment tracking' },
+        { start: 28.0, label: 'Breach alerts' },
+        { start: 39.0, label: 'Privacy' },
+        { start: 46.5, label: 'Get SafeCart' }
+      ];
+      var BASE = 53.0;            // authored timeline length (seconds)
+      var audioDur = 0;           // real voiceover length, if one is present
+      var N = scenes.length;
+
+      var haveAudio = false, usingAudio = false, running = false, raf = 0, startPerf = 0, current = -1;
+      var haveMusic = false, MUSIC_VOL = 0.08;   // soft background bed, well under the voice
+      var VO_RATE = 1.1;                          // nudge the voiceover a touch faster so it feels less mundane
+      var MUSIC_START = 0.6;                      // begin partway into the swell — bed is present at once but eases in gently
+
+      // Assume the bundled voiceover is present and let the play() call inside the click
+      // gesture be the real test. Mobile Safari/Chrome often never fire 'canplaythrough'
+      // until playback starts, so gating on it left phones silent. We gate on the actual
+      // play() promise in start() instead, and fall back to the silent timeline only if
+      // it rejects (e.g. the file is genuinely missing).
+      if (audio) {
+        haveAudio = true;
+        frame.classList.add('has-audio');
+        audio.addEventListener('loadedmetadata', function () { if (isFinite(audio.duration) && audio.duration > 1) audioDur = audio.duration; });
+        audio.addEventListener('ended', finish);
+        audio.addEventListener('error', function () { haveAudio = false; usingAudio = false; frame.classList.remove('has-audio'); });
+      }
+
+      // Optional background music: same optimistic approach, graceful if the file is absent.
+      // iOS Safari ignores HTMLMediaElement.volume entirely, so the bed is attenuated with a
+      // Web Audio GainNode (see ensureMusicGain/setMusicLevel) instead of music.volume.
+      var musicCtx = null, musicGain = null;
+      if (music) {
+        haveMusic = true;
+        music.addEventListener('error', function () { haveMusic = false; });
+      }
+
+      // Smoothly ramp an element's volume so the music bed fades in/out instead of cutting hard.
+      function fade(el, to, ms, then) {
+        if (!el) { if (then) then(); return; }
+        if (el._fadeT) clearInterval(el._fadeT);
+        var from = el.volume, steps = Math.max(1, Math.round(ms / 40)), n = 0;
+        el._fadeT = setInterval(function () {
+          n++; el.volume = Math.max(0, Math.min(1, from + (to - from) * (n / steps)));
+          if (n >= steps) { clearInterval(el._fadeT); el._fadeT = null; if (then) then(); }
+        }, 40);
+      }
+
+      // Build the iOS-safe gain path once, inside a user gesture. Only the music routes
+      // through the gain; the voice element is left alone so it stays at full volume.
+      function ensureMusicGain() {
+        if (musicGain || !music) return;
+        var Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return;                       // no Web Audio → setMusicLevel falls back to element.volume
+        try {
+          musicCtx = new Ctx();
+          var src = musicCtx.createMediaElementSource(music);
+          musicGain = musicCtx.createGain();
+          musicGain.gain.value = MUSIC_VOL;
+          src.connect(musicGain); musicGain.connect(musicCtx.destination);
+          music.volume = 1;                     // element at unity; the GainNode sets the real level
+        } catch (e) { musicCtx = null; musicGain = null; }
+      }
+
+      // Set the music level via the gain node (respected on iOS) or element volume (fallback).
+      function setMusicLevel(v, ms) {
+        if (musicGain && musicCtx) {
+          var now = musicCtx.currentTime, g = musicGain.gain;
+          try {
+            g.cancelScheduledValues(now);
+            g.setValueAtTime(g.value, now);
+            if (ms > 0) g.linearRampToValueAtTime(v, now + ms / 1000); else g.setValueAtTime(v, now);
+          } catch (e) { try { g.value = v; } catch (e2) {} }
+        } else if (music) {
+          if (ms > 0) fade(music, v, ms); else { try { music.volume = v; } catch (e) {} }
+        }
+      }
+
+      function clock() { return usingAudio ? audio.currentTime : (performance.now() - startPerf) / 1000; }
+      // When a voiceover plays, stretch the scene cues to its real length so captions stay in sync at any duration.
+      function effDuration() { return (usingAudio && audioDur) ? audioDur : BASE; }
+      function cueAt(i) { return (usingAudio && audioDur) ? scenes[i].start * (audioDur / BASE) : scenes[i].start; }
+
+      function setScene(i) {
+        if (i === current) return;
+        current = i;
+        for (var k = 0; k < N; k++) sceneEls[k].classList.toggle('is-active', k === i);
+        ccLabel.textContent = (i + 1) + ' / ' + N + '  ·  ' + scenes[i].label;
+      }
+
+      function tick() {
+        if (!running) return;
+        var t = clock(), idx = 0;
+        for (var i = 0; i < N; i++) { if (t >= cueAt(i)) idx = i; }
+        setScene(idx);
+        fill.style.width = Math.max(0, Math.min(1, t / effDuration())) * 100 + '%';
+        if (!usingAudio && t >= BASE) { finish(); return; }
+        raf = requestAnimationFrame(tick);
+      }
+
+      function start() {
+        running = true;
+        frame.classList.remove('ended'); frame.classList.add('playing');
+        // Reset + force reflow so the first scene's kinetic words replay on every start.
+        sceneEls.forEach(function (s) { s.classList.remove('is-active'); });
+        void frame.offsetWidth;
+        current = -1; setScene(0);
+        // Start the music FIRST (and past its soft intro) so it can never lag the voice on call-order/latency.
+        if (haveMusic) {
+          ensureMusicGain();                                      // build the iOS-safe gain path on this gesture
+          if (musicCtx && musicCtx.state === 'suspended') { try { musicCtx.resume(); } catch (e) {} }
+          if (music._fadeT) { clearInterval(music._fadeT); music._fadeT = null; }  // cancel any in-flight fade-out (rapid replay)
+          try { music.currentTime = MUSIC_START; } catch (e) {}   // skip the swell so the bed is audible from the first word
+          setMusicLevel(MUSIC_VOL, 0);                            // soft bed level — GainNode on iOS, element volume elsewhere
+          var pm = music.play();
+          if (pm && pm.catch) pm.catch(function () {});
+        }
+        if (haveAudio) {
+          try { audio.currentTime = 0; } catch (e) {}
+          try { audio.preservesPitch = true; } catch (e) {}   // keep natural pitch when sped up
+          audio.playbackRate = VO_RATE;                        // a touch faster so it feels less mundane
+          var p = audio.play();
+          if (p && p.then) {
+            p.then(function () {
+              usingAudio = true;
+              // Mobile defers metadata — the real duration may only be known now; lock cue-scaling to it.
+              if (!audioDur && isFinite(audio.duration) && audio.duration > 1) audioDur = audio.duration;
+            }).catch(function () { usingAudio = false; startPerf = performance.now(); });
+          } else { usingAudio = true; }
+        }
+        if (!usingAudio) startPerf = performance.now();
+        if (window.gtag) gtag('event', 'demo_play');
+        cancelAnimationFrame(raf); raf = requestAnimationFrame(tick);
+      }
+
+      function finish() {
+        running = false; cancelAnimationFrame(raf);
+        fill.style.width = '100%';
+        if (haveAudio) { try { audio.pause(); } catch (e) {} }
+        if (haveMusic) { setMusicLevel(0, 450); setTimeout(function () { try { music.pause(); } catch (e) {} }, 480); }
+        frame.classList.remove('playing'); frame.classList.add('ended');
+      }
+
+      poster.addEventListener('click', start);
+      replay.querySelector('.demo-again').addEventListener('click', function (e) { e.preventDefault(); start(); });
+
+      if (muteBtn) {
+        muteBtn.addEventListener('click', function () {
+          var muted = !frame.classList.contains('muted');
+          if (audio) audio.muted = muted;
+          if (music) music.muted = muted;
+          setMusicLevel(muted ? 0 : MUSIC_VOL, 120);   // drop the gain too, so iOS actually mutes the bed
+          frame.classList.toggle('muted', muted);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

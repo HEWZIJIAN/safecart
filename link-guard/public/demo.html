@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>link-guard — demo</title>
+  <link rel="stylesheet" href="/link-guard.css" />
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 20px; color: #1f1b16; line-height: 1.5; }
+    h1 { font-size: 28px; }
+    a { color: #2f62e0; }
+    li { margin: 10px 0; }
+    .tag { font: 700 12px/1 ui-monospace, monospace; padding: 2px 6px; border-radius: 4px; background: #f3ede0; color: #6d6456; }
+    code { background: #f3ede0; padding: 1px 5px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>🛡️ link-guard demo</h1>
+  <p>With the server running (mock provider), click these external links. Safe ones go through;
+     flagged ones pop a warning modal. Hover first to pre-warm the scan.</p>
+  <ul>
+    <li><a href="https://example.com/">example.com</a> <span class="tag">expect: safe</span></li>
+    <li><a href="https://en.wikipedia.org/wiki/Phishing">wikipedia.org</a> <span class="tag">expect: safe</span></li>
+    <li><a href="https://paypa1-secure-login.com/verify">paypa1-secure-login.com</a> <span class="tag">expect: malicious (lookalike)</span></li>
+    <li><a href="https://account.update.verify.login.secure-bank-co.com/">deep.subdomains…secure-bank-co.com</a> <span class="tag">expect: suspicious</span></li>
+    <li><a href="https://testsafebrowsing.appspot.com/s/phishing.html">testsafebrowsing.appspot.com</a> <span class="tag">expect: malicious</span></li>
+    <li><a href="https://example.org/" data-lg-ignore>example.org (opted out via <code>data-lg-ignore</code>)</a> <span class="tag">expect: no scan</span></li>
+  </ul>
+
+  <!-- Auto-init: attaches to all external links, posts to /api/scan -->
+  <script src="/link-guard.js" data-auto data-endpoint="/api/scan"></script>
+</body>
+</html>

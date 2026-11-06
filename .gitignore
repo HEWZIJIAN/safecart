@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.vite/
+*.log
+.DS_Store
+
+# Secrets — never commit
+.claude/
+.env
+**/.env
+.dev.vars
+**/.dev.vars
+**/.cf-token
+.wrangler/
+**/.wrangler/
+
+# Release builds + marketing media (large, personal, third-party screenshots)
+*.zip
+marketing/

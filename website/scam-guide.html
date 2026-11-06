@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How to Spot a Scam — SafeCart Field Guide № 01</title>
+<meta name="description" content="Fake stores, phishing, and payment traps share the same fingerprints. The six-second gut check that catches them all — free from SafeCart." />
+<link rel="canonical" href="https://safecart.co/scam-guide" />
+<meta property="og:title" content="How to Spot a Scam — SafeCart Field Guide" />
+<meta property="og:description" content="The six-second gut check that catches fake stores, phishing, and payment traps." />
+<meta property="og:image" content="https://safecart.co/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M24 3 L40 9 L40 19 C40 30 33 37 24 42 C15 37 8 30 8 19 L8 9 Z' fill='%232f62e0'/%3E%3Cpath d='M16.5 23 L21.5 28 L31 17' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,500;9..144,0,600;9..144,1,600;9..144,0,900&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ECGP0XNK7C"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ECGP0XNK7C');</script>
+<style>
+  :root{--paper:#f3ede0;--paper2:#faf7f0;--card:#fbf8f1;--ink:#1f1b16;--soft:#6d6456;--red:#c2392c;--green:#1c7350;--blue:#2f62e0;--blue-d:#1e49b8;--line:#d9cfbc}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--paper2);scroll-behavior:smooth}
+  body{font-family:'Inter',-apple-system,Segoe UI,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .btn{display:inline-flex;align-items:center;gap:10px;background:var(--blue);color:#fff;font-weight:700;font-size:16px;padding:13px 24px;border-radius:12px;box-shadow:0 8px 22px rgba(47,98,224,.28);transition:background .15s}
+  .btn:hover{background:var(--blue-d)}
+  .btn .ci{width:19px;height:19px}
+  /* nav */
+  .nav{position:sticky;top:0;z-index:20;background:rgba(250,247,240,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav-in{max-width:1080px;margin:0 auto;padding:0 28px;height:66px;display:flex;align-items:center;justify-content:space-between}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:600;font-size:23px}
+  .logo .sh{width:28px;height:28px;color:var(--blue)}
+  /* field guide sheet */
+  .sheet{max-width:1080px;margin:0 auto;background:var(--paper);padding:56px 64px 44px;position:relative}
+  .sheet::before{content:"";position:absolute;inset:0;background-image:radial-gradient(var(--line) .5px,transparent .5px);background-size:22px 22px;opacity:.35;pointer-events:none}
+  .wrap{position:relative}
+  .eyebrow{font-family:'Space Mono',monospace;font-size:19px;letter-spacing:.22em;text-transform:uppercase;color:var(--soft);display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .eyebrow .sh{width:26px;height:26px;color:var(--red)}
+  .eyebrow b{color:var(--ink);font-weight:700}
+  h1{font-family:'Fraunces','Georgia',serif;font-weight:600;font-size:80px;line-height:.98;letter-spacing:-.015em;margin-bottom:22px}
+  h1 em{font-style:italic;color:var(--red)}
+  .dek{font-size:27px;line-height:1.42;color:#3c352b;max-width:780px;font-weight:450}
+  .dek b{font-weight:700;color:var(--ink)}
+  .rule-line{height:2px;background:var(--ink);margin:34px 0 0}
+  .tag{font-family:'Space Mono',monospace;font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);font-weight:700;margin:40px 0 18px;display:flex;align-items:center;gap:12px}
+  .tag::after{content:"";flex:1;height:1px;background:var(--line)}
+  .tells{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+  .tell{padding:24px 26px;border-bottom:1px solid var(--line);display:flex;gap:18px}
+  .tell:nth-child(odd){border-right:1px solid var(--line)}
+  .tell.full{grid-column:1 / -1;border-right:none}
+  .tell:nth-last-child(1),.tell:nth-last-child(2){border-bottom:none}
+  .tell .num{font-family:'Fraunces',serif;font-weight:900;font-size:46px;line-height:.8;color:var(--red);flex:none;width:46px}
+  .tell .ic{width:30px;height:30px;color:var(--ink);flex:none;margin-top:4px}
+  .tell h3{font-size:25px;font-weight:800;margin-bottom:4px}
+  .tell p{font-size:20px;line-height:1.4;color:#4a4338}
+  .tell code{font-family:'Space Mono',monospace;font-size:18px;background:rgba(194,57,44,.10);color:#9a2c22;padding:1px 6px;border-radius:4px}
+  .suspects{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+  .suspect{padding:19px 26px;border-bottom:1px solid var(--line);display:flex;gap:18px;align-items:baseline}
+  .suspect:last-child{border-bottom:none}
+  .suspect .nm{font-family:'Fraunces',serif;font-weight:600;font-size:24px;flex:none;width:300px}
+  .suspect .bt{font-size:19.5px;line-height:1.42;color:#4a4338}
+  .suspect .bt b.b{color:var(--red);font-weight:700}.suspect .bt b.t{color:var(--green);font-weight:700}
+  .rulebox{margin:34px 0 10px;border-left:5px solid var(--green);background:var(--card);padding:26px 30px;border-radius:0 10px 10px 0}
+  .rulebox .lab{font-family:'Space Mono',monospace;font-size:16px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:10px}
+  .rulebox q{font-family:'Fraunces',serif;font-size:38px;line-height:1.18;font-weight:600;quotes:none;display:block}
+  .rulebox q b{color:var(--green)}
+  /* convert band */
+  .convert{max-width:1080px;margin:0 auto 60px;padding:0 64px}
+  .convert .box{background:var(--ink);color:#f3ede0;border-radius:20px;padding:46px 44px;display:flex;align-items:center;justify-content:space-between;gap:30px;flex-wrap:wrap}
+  .convert h2{font-family:'Fraunces',serif;font-weight:600;font-size:34px;line-height:1.12;max-width:560px}
+  .convert h2 em{font-style:italic;color:#9fb6f2}
+  .convert p{font-size:17px;color:#cbc4b6;margin-top:10px;max-width:540px}
+  .convert .btn{background:var(--blue);font-size:17px;padding:16px 28px}
+  footer{border-top:1px solid var(--line);text-align:center;padding:28px;font-size:14px;color:var(--soft)}
+  footer a{color:var(--blue);font-weight:600}
+  @media (max-width:820px){
+    .sheet{padding:40px 24px 30px}h1{font-size:48px}.dek{font-size:21px}
+    .tells{grid-template-columns:1fr}.tell{border-right:none!important}
+    .tell:nth-last-child(2){border-bottom:1px solid var(--line)}
+    .suspect{flex-direction:column;gap:4px}.suspect .nm{width:auto}
+    .rulebox q{font-size:27px}.convert{padding:0 24px}.convert .box{flex-direction:column;align-items:flex-start;padding:32px 26px}.convert h2{font-size:27px}
+  }
+</style></head>
+<body>
+  <div class="nav"><div class="nav-in">
+    <a class="logo" href="/"><svg class="sh" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L20 5 V11 C20 16.5 16.5 20.5 12 22 C7.5 20.5 4 16.5 4 11 V5 Z"/></svg>SafeCart</a>
+    <a class="btn js-install" href="#"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2"/><path d="M12 3v6M20 8.5l-5.2 3M4 8.5l5.2 3" stroke-linecap="round"/></svg>Add to Chrome — Free</a>
+  </div></div>
+
+  <div class="sheet"><div class="wrap">
+    <div class="eyebrow"><svg class="sh" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L20 5 V11 C20 16.5 16.5 20.5 12 22 C7.5 20.5 4 16.5 4 11 V5 Z"/></svg>SafeCart Field Guide &nbsp;·&nbsp; <b>№ 01</b></div>
+    <h1>How to Spot a <em>Scam</em></h1>
+    <div class="dek">Fake stores, phishing, payment traps — they all share the same fingerprints. Learn the <b>six-second gut check</b> once, and you'll feel the wrongness before you ever type your card.</div>
+    <div class="rule-line"></div>
+
+    <div class="tag">The six-second gut check</div>
+    <ol class="tells">
+      <li class="tell"><span class="num">1</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12.5 V4 H11.5 L20.5 13a1.5 1.5 0 0 1 0 2.1L15.1 20.5a1.5 1.5 0 0 1-2.1 0Z" stroke-linejoin="round"/><circle cx="7.6" cy="8" r="1.4"/></svg></span><div><h3>Too good to be true</h3><p>A $600 item for $89 isn't luck. If the deal is impossible, it's bait.</p></div></li>
+      <li class="tell"><span class="num">2</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.3V12L15.2 14" stroke-linecap="round"/></svg></span><div><h3>Manufactured urgency</h3><p>Countdown timers and "only 2 left" exist to stop you thinking.</p></div></li>
+      <li class="tell"><span class="num">3</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.6 14.4 L14.4 9.6" stroke-linecap="round"/><path d="M8 11 L6.2 12.8a3.6 3.6 0 0 0 5.1 5.1L13 16.2" stroke-linecap="round"/><path d="M16 13 l1.8-1.8a3.6 3.6 0 0 0-5.1-5.1L11 7.8" stroke-linecap="round"/></svg></span><div><h3>The address is off</h3><p><code>paypa1</code>, not <code>paypal</code>. Read every domain letter by letter.</p></div></li>
+      <li class="tell"><span class="num">4</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="15" rx="1.6"/><path d="M3.5 9.5H20.5M8 3.5V6.5M16 3.5V6.5" stroke-linecap="round"/></svg></span><div><h3>Brand-new website</h3><p>Registered days ago, no reviews, no history. A free whois lookup shows its age.</p></div></li>
+      <li class="tell"><span class="num">5</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="12" rx="1.8"/><path d="M3 10H21M7 14.5H11" stroke-linecap="round"/></svg></span><div><h3>Unusual payment</h3><p>Gift cards, wire transfer, crypto, or a "release fee" — walk away.</p></div></li>
+      <li class="tell full"><span class="num">6</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17V11a5 5 0 0 1 10 0v6M5 17h14M10.4 20a1.8 1.8 0 0 0 3.2 0" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><h3>You didn't ask for it</h3><p>An out-of-the-blue text or email pushing you to act <b>right now</b> — that pressure is the scam.</p></div></li>
+    </ol>
+
+    <div class="tag">The usual suspects</div>
+    <div class="suspects">
+      <div class="suspect"><div class="nm">Fake online store</div><div class="bt"><b class="b">Bait:</b> a huge discount on a hot product. &nbsp;<b class="t">Tell:</b> lookalike domain, fake countdown, no real reviews.</div></div>
+      <div class="suspect"><div class="nm">"Redelivery fee" text</div><div class="bt"><b class="b">Bait:</b> "$1.99 to release your parcel." &nbsp;<b class="t">Tell:</b> carriers never text you for money.</div></div>
+      <div class="suspect"><div class="nm">"Payment failed" email</div><div class="bt"><b class="b">Bait:</b> "update your card or lose access." &nbsp;<b class="t">Tell:</b> real brands don't fix billing through an email link.</div></div>
+      <div class="suspect"><div class="nm">"You've been paid"</div><div class="bt"><b class="b">Bait:</b> "confirm your card to release the funds." &nbsp;<b class="t">Tell:</b> money coming IN never needs your card.</div></div>
+      <div class="suspect"><div class="nm">Lookalike login</div><div class="bt"><b class="b">Bait:</b> "verify your account now." &nbsp;<b class="t">Tell:</b> read the domain — amaz0n, paypa1, g00gle.</div></div>
+      <div class="suspect"><div class="nm">Gift-card demand</div><div class="bt"><b class="b">Bait:</b> "settle your bill with a gift card." &nbsp;<b class="t">Tell:</b> no real company or agency EVER takes gift cards.</div></div>
+    </div>
+
+    <div class="rulebox"><div class="lab">If you remember one thing</div><q>When something rushes you to pay or click — <b>slow down.</b> Open the app or type the real address yourself, and never pay by gift card.</q></div>
+  </div></div>
+
+  <div class="convert"><div class="box">
+    <div>
+      <h2>You shouldn't have to <em>remember</em> all this.</h2>
+      <p>SafeCart runs this gut check for you — automatically — and warns you the second a checkout looks fake. Free, private, one click.</p>
+    </div>
+    <a class="btn js-install" href="#"><svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2"/><path d="M12 3v6M20 8.5l-5.2 3M4 8.5l5.2 3" stroke-linecap="round"/></svg>Add to Chrome — Free</a>
+  </div></div>
+
+  <footer>© 2026 SafeCart · <a href="/">safecart.co</a> · Spot the scam before you pay.</footer>
+
+  <script>
+    var CHROME_STORE_URL="https://chromewebstore.google.com/detail/safecart/cljpoelnlljioahkhgiplbbgkacebech";
+    document.querySelectorAll('.js-install').forEach(function(el){el.setAttribute('href',CHROME_STORE_URL);el.setAttribute('target','_blank');el.setAttribute('rel','noopener');el.addEventListener('click',function(){if(window.gtag)gtag('event','install_click',{location:'scam-guide'});});});
+  </script>
+</body></html>

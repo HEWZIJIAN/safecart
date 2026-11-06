@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>SafeCart — Data breach alerts</title>
+    <link rel="stylesheet" href="breaches.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <h1>Data breach alerts</h1>
+        <p class="sub">SafeCart checks the stores you shop at against HaveIBeenPwned once a day. All checks run in this browser.</p>
+        <div class="header-actions">
+          <button id="scan-now" class="primary">Scan now</button>
+          <span id="scan-status"></span>
+        </div>
+      </header>
+
+      <section id="summary-card" class="card">
+        <div class="row"><span class="label">Tracked stores</span><span id="s-tracked">—</span></div>
+        <div class="row"><span class="label">Active breaches</span><span id="s-active">—</span></div>
+        <div class="row"><span class="label">Last scan</span><span id="s-last">—</span></div>
+      </section>
+
+      <section id="merchants-section">
+        <h2>Stores</h2>
+        <div id="merchants-list">Loading…</div>
+      </section>
+    </div>
+    <script src="breaches.js" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "SafeCart",
+    "description": "Extension name — shown in the Chrome Web Store and the toolbar. Usually kept the same across languages."
+  },
+  "appDescription": {
+    "message": "Protects online shoppers from phishing, tracks payments, and surfaces data-breach alerts.",
+    "description": "Short description shown in the Chrome Web Store. Safe to translate per locale."
+  }
+}

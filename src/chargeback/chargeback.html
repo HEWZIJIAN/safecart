@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>SafeCart — Start a chargeback</title>
+    <link rel="stylesheet" href="chargeback.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <h1>Start a chargeback</h1>
+        <p class="sub" id="sub">Review the details, copy the template, contact the merchant.</p>
+      </header>
+
+      <section class="card" id="payment-card">
+        <div class="row"><span class="label">Merchant</span><span id="p-merchant">—</span></div>
+        <div class="row"><span class="label">Website</span><span id="p-url">—</span></div>
+        <div class="row"><span class="label">Amount</span><span id="p-amount">—</span></div>
+        <div class="row"><span class="label">When</span><span id="p-when">—</span></div>
+        <div class="row"><span class="label">Status</span><span id="p-status">—</span></div>
+      </section>
+
+      <section class="card">
+        <h2>Step 1 — Contact the merchant first</h2>
+        <div id="support-block">Loading support contacts…</div>
+      </section>
+
+      <section class="card">
+        <h2>Step 2 — Use this email template</h2>
+        <textarea id="template" readonly></textarea>
+        <div class="actions">
+          <button id="copy-template" class="primary">Copy template</button>
+          <button id="mailto" class="secondary">Open in mail app</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Step 3 — If the merchant doesn't resolve it, dispute with your card</h2>
+        <p>Most issuers allow chargebacks within 60–120 days. Use this summary when you call your bank or file online:</p>
+        <textarea id="bank-template" readonly></textarea>
+        <div class="actions">
+          <button id="copy-bank" class="primary">Copy bank summary</button>
+          <a id="cfpb-link" class="secondary-link" target="_blank" rel="noopener">Learn about chargeback rights →</a>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Already received the receipt?</h2>
+        <p>If the order came through after all, mark it confirmed so SafeCart stops bugging you.</p>
+        <button id="mark-confirmed" class="secondary">I have the receipt</button>
+      </section>
+    </div>
+    <script src="chargeback.js" type="module"></script>
+  </body>
+</html>

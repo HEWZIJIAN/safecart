@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "weights": {
+    "safeBrowsingMatch": 90,
+    "phishTankMatch": 85,
+    "nonHttps": 35,
+    "punycode": 25,
+    "mixedScript": 30,
+    "brandLookalikeNear": 60,
+    "brandLookalikeMedium": 35,
+    "brandSubstringMisuse": 40,
+    "youngDomainUnder30d": 35,
+    "youngDomainUnder180d": 15,
+    "unknownDomainAge": 5,
+    "suspiciousTld": 15,
+    "ipLiteralHost": 40,
+    "manyHyphensOrDigits": 10,
+    "suspiciousKeywordInHost": 15
+  },
+  "suspiciousTlds": [
+    "zip", "mov", "country", "click", "link", "xyz", "top", "rest",
+    "support", "fit", "monster", "cyou", "quest"
+  ],
+  "brandTlds": [
+    "com", "net", "org", "co", "io",
+    "de", "fr", "it", "es", "nl", "se", "pl", "ca", "in", "jp", "mx", "br",
+    "ch", "at", "be", "dk", "fi", "no", "ie", "pt",
+    "com.au", "co.uk", "co.jp", "com.br", "com.mx", "com.sg", "com.hk", "com.tw",
+    "com.cn", "co.in", "com.tr", "co.kr", "co.za", "co.nz", "com.my", "co.th", "com.ph"
+  ],
+  "suspiciousKeywords": [
+    "secure", "account", "update", "verify", "login", "signin", "wallet",
+    "billing", "payment", "confirm"
+  ]
+}

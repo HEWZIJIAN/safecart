@@ -1,0 +1,141 @@
+#safecart-overlay-root {
+  all: initial;
+}
+
+#safecart-overlay-root, #safecart-overlay-root * {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+#safecart-overlay-root .safecart-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 0, 0, 0.72);
+  z-index: 2147483646;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+#safecart-overlay-root .safecart-modal {
+  background: #ffffff;
+  color: #1a1a1a;
+  max-width: 560px;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  z-index: 2147483647;
+  animation: safecart-pop 160ms ease-out;
+}
+
+@keyframes safecart-pop {
+  from { transform: scale(0.96); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+#safecart-overlay-root .safecart-header {
+  background: #c2392c;
+  color: #fff;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#safecart-overlay-root .safecart-header.safecart-suspicious {
+  background: #e8590c;
+}
+
+#safecart-overlay-root .safecart-header-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+#safecart-overlay-root .safecart-header-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+#safecart-overlay-root .safecart-header-sub {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-top: 2px;
+}
+
+#safecart-overlay-root .safecart-body {
+  padding: 20px 24px;
+}
+
+#safecart-overlay-root .safecart-body p {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#safecart-overlay-root .safecart-host {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: #f1f3f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+#safecart-overlay-root .safecart-reasons {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 16px;
+}
+
+#safecart-overlay-root .safecart-reasons li {
+  padding: 10px 12px;
+  background: #fff5f5;
+  border-left: 3px solid #c2392c;
+  margin-bottom: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  border-radius: 4px;
+}
+
+#safecart-overlay-root .safecart-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 16px 24px 20px;
+  background: #fafafa;
+  border-top: 1px solid #eee;
+}
+
+#safecart-overlay-root .safecart-btn {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#safecart-overlay-root .safecart-btn-primary {
+  background: #2f62e0;
+  color: #fff;
+}
+
+#safecart-overlay-root .safecart-btn-secondary {
+  background: transparent;
+  color: #868e96;
+}
+
+#safecart-overlay-root .safecart-score {
+  font-size: 12px;
+  color: #868e96;
+  margin-top: 4px;
+}
+
+.safecart-field-locked {
+  pointer-events: none !important;
+  background-image: repeating-linear-gradient(
+    45deg, rgba(201, 42, 42, 0.08), rgba(201, 42, 42, 0.08) 8px,
+    rgba(201, 42, 42, 0.16) 8px, rgba(201, 42, 42, 0.16) 16px) !important;
+  outline: 2px solid #c2392c !important;
+}

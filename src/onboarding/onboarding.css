@@ -1,0 +1,260 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: radial-gradient(130% 90% at 50% -10%, rgba(47, 98, 224, 0.07), transparent 55%), #faf7f0;
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: #1f1b16;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 640px;
+  width: 100%;
+  position: relative;
+}
+
+.slides {
+  position: relative;
+  min-height: 540px;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(40px);
+  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+.slide.exit-left {
+  transform: translateX(-40px);
+}
+
+.slide-content {
+  background: #ffffff;
+  border: 1px solid #e7dfcf;
+  border-radius: 24px;
+  padding: 48px 40px;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(60, 45, 25, 0.13);
+}
+
+.hero-icon {
+  width: 96px;
+  height: 96px;
+  margin-bottom: 24px;
+  border-radius: 22px;
+  box-shadow: 0 8px 24px rgba(47, 98, 224, 0.32);
+}
+
+.feature-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  display: inline-block;
+  line-height: 1;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+
+.lead {
+  font-size: 18px;
+  color: #3c352b;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.sub {
+  font-size: 15px;
+  color: #6d6456;
+  line-height: 1.6;
+  margin-bottom: 28px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-skip {
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background: #2f62e0;
+  color: white;
+  display: block;
+  margin: 0 auto 12px;
+  min-width: 200px;
+  box-shadow: 0 8px 20px rgba(47, 98, 224, 0.28);
+}
+
+.btn-primary:hover {
+  background: #1e49b8;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(47, 98, 224, 0.38);
+}
+
+.btn-secondary {
+  background: #f3ecdd;
+  color: #1f1b16;
+  border: 1px solid #d9cfbc;
+}
+
+.btn-secondary:hover {
+  background: #ece3d2;
+}
+
+.btn-skip {
+  background: transparent;
+  color: #948b7d;
+  font-size: 13px;
+  padding: 8px 16px;
+  display: block;
+  margin: 0 auto;
+}
+
+.btn-skip:hover {
+  color: #6d6456;
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cta-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.example-callout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin: 0 auto 28px;
+  max-width: 440px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.example-callout .badge {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.example-callout.dangerous {
+  background: rgba(194, 57, 44, 0.10);
+  border: 1px solid rgba(194, 57, 44, 0.30);
+  color: #c2392c;
+}
+
+.example-callout.success {
+  background: rgba(28, 115, 80, 0.10);
+  border: 1px solid rgba(28, 115, 80, 0.30);
+  color: #1c7350;
+}
+
+.example-callout.warning {
+  background: rgba(196, 125, 18, 0.13);
+  border: 1px solid rgba(196, 125, 18, 0.34);
+  color: #9a6410;
+}
+
+.footnote {
+  font-size: 13px;
+  color: #948b7d;
+  margin-top: 16px;
+}
+
+.progress-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 32px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d9cfbc;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.dot.active {
+  background: #2f62e0;
+  transform: scale(1.3);
+}
+
+.dot:hover {
+  background: #b9ad96;
+}
+
+@media (max-width: 600px) {
+  .slide-content {
+    padding: 32px 24px;
+  }
+  h1 {
+    font-size: 28px;
+  }
+  h2 {
+    font-size: 24px;
+  }
+  .lead {
+    font-size: 16px;
+  }
+  .feature-icon {
+    font-size: 56px;
+  }
+  .hero-icon {
+    width: 80px;
+    height: 80px;
+  }
+}

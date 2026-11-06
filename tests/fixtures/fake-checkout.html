@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta property="og:site_name" content="Test Mart" />
+    <title>Test Mart — Checkout</title>
+    <style>
+      body { font-family: -apple-system, system-ui, sans-serif; max-width: 520px; margin: 40px auto; padding: 0 16px; color: #1a1a1a; }
+      h1 { font-size: 22px; }
+      .card { background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 20px; margin-top: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+      label { display: block; font-size: 13px; margin: 12px 0 4px; font-weight: 600; }
+      input { width: 100%; padding: 8px 10px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; }
+      .row { display: flex; gap: 12px; }
+      .row > div { flex: 1; }
+      .total-row { display: flex; justify-content: space-between; margin: 16px 0; font-size: 16px; }
+      .total-row .label { font-weight: 600; }
+      .total-row .amount { font-weight: 700; }
+      button { width: 100%; margin-top: 20px; padding: 12px; background: #1971c2; color: #fff; border: none; border-radius: 4px; font-size: 15px; font-weight: 700; cursor: pointer; }
+      button:hover { background: #1864ab; }
+    </style>
+  </head>
+  <body>
+    <h1>Test Mart — Checkout</h1>
+
+    <div class="card">
+      <div class="total-row"><span class="label">Subtotal</span><span>$94.50</span></div>
+      <div class="total-row"><span class="label">Shipping</span><span>$5.00</span></div>
+      <div class="total-row"><span class="label">Order total</span><span class="amount">$99.50</span></div>
+    </div>
+
+    <div class="card">
+      <label for="card">Card number</label>
+      <input id="card" name="card_number" type="tel" autocomplete="cc-number" placeholder="4242 4242 4242 4242" />
+      <div class="row">
+        <div>
+          <label for="exp">Expiry</label>
+          <input id="exp" name="cc-exp" type="text" autocomplete="cc-exp" placeholder="MM/YY" />
+        </div>
+        <div>
+          <label for="cvc">CVC</label>
+          <input id="cvc" name="cc-csc" type="text" autocomplete="cc-csc" placeholder="123" />
+        </div>
+      </div>
+
+      <button id="pay" type="button" onclick="window.location.href='./fake-thankyou.html'">
+        Pay $99.50
+      </button>
+    </div>
+  </body>
+</html>

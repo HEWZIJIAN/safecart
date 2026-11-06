@@ -1,0 +1,23 @@
+name = "safecart-api"
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Public, non-secret config goes here. Secrets are set with:
+#   wrangler secret put SUPABASE_JWT_SECRET
+#   wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+#   wrangler secret put STRIPE_SECRET_KEY
+#   wrangler secret put STRIPE_WEBHOOK_SECRET
+#   wrangler secret put SAFE_BROWSING_API_KEY
+#   wrangler secret put PHISHTANK_API_KEY        (optional)
+#   wrangler secret put HIBP_API_KEY              (optional — not needed for domain endpoint)
+#
+# For local dev (`wrangler dev`), put the same values into .dev.vars.
+
+[vars]
+SUPABASE_URL = "https://kwptfmvvlvjvseksnpxb.supabase.co"
+STRIPE_PREMIUM_PRICE_ID = "price_1TZIEJILXVGITVkKTkv2HHbQ"
+STRIPE_FAMILY_PRICE_ID = "price_1TZIEOILXVGITVkKRbQizWuo"
+CHECKOUT_SUCCESS_URL = "https://safecart-api.safecart-hzj.workers.dev/success.html"
+CHECKOUT_CANCEL_URL = "https://safecart-api.safecart-hzj.workers.dev/cancel.html"
+BILLING_PORTAL_RETURN_URL = "https://safecart-api.safecart-hzj.workers.dev/success.html"

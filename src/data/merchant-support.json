@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "merchants": {
+    "amazon.com": {
+      "name": "Amazon",
+      "phone": "1-888-280-4331",
+      "url": "https://www.amazon.com/gp/help/customer/contact-us",
+      "email": ""
+    },
+    "ebay.com": {
+      "name": "eBay",
+      "phone": "1-866-540-3229",
+      "url": "https://www.ebay.com/help/home",
+      "email": ""
+    },
+    "walmart.com": {
+      "name": "Walmart",
+      "phone": "1-800-925-6278",
+      "url": "https://www.walmart.com/help",
+      "email": "help@walmart.com"
+    },
+    "target.com": {
+      "name": "Target",
+      "phone": "1-800-440-0680",
+      "url": "https://help.target.com",
+      "email": "guest.relations@target.com"
+    },
+    "bestbuy.com": {
+      "name": "Best Buy",
+      "phone": "1-888-237-8289",
+      "url": "https://www.bestbuy.com/site/customer-service/store-locator/pcmcat138100050018.c",
+      "email": ""
+    },
+    "etsy.com": {
+      "name": "Etsy",
+      "phone": "",
+      "url": "https://help.etsy.com/hc/en-us/requests/new",
+      "email": ""
+    },
+    "shopify.com": {
+      "name": "Shopify (merchant via Shopify)",
+      "phone": "",
+      "url": "https://help.shopify.com/en/support/login",
+      "email": ""
+    },
+    "paypal.com": {
+      "name": "PayPal",
+      "phone": "1-888-221-1161",
+      "url": "https://www.paypal.com/us/smarthelp/contact-us",
+      "email": ""
+    },
+    "shopee.com": {
+      "name": "Shopee",
+      "phone": "",
+      "url": "https://help.shopee.com/portal",
+      "email": ""
+    },
+    "lazada.com": {
+      "name": "Lazada",
+      "phone": "",
+      "url": "https://www.lazada.com/helpcenter/",
+      "email": ""
+    }
+  },
+  "fallback": {
+    "instructions": "Could not match this merchant to a verified support directory. Use the contact info on your card statement and dispute the charge with your card issuer (Visa/Mastercard typically allow chargebacks within 60–120 days).",
+    "url": "https://www.consumerfinance.gov/ask-cfpb/what-is-a-chargeback-en-1497/"
+  }
+}

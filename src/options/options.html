@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>SafeCart — Settings</title>
+    <style>
+      body { font-family: -apple-system, system-ui, sans-serif; max-width: 560px; margin: 40px auto; padding: 0 16px; color: #222; }
+      h1 { font-size: 20px; }
+      label { display: block; font-size: 13px; margin: 16px 0 4px; font-weight: 600; }
+      input[type="text"], input[type="password"] { width: 100%; padding: 8px; font-size: 13px; border: 1px solid #ccc; border-radius: 4px; }
+      .row { display: flex; align-items: center; gap: 8px; margin-top: 16px; }
+      button { margin-top: 20px; padding: 8px 14px; background: #2f62e0; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+      .hint { font-size: 12px; color: #777; margin-top: 4px; }
+    </style>
+  </head>
+  <body>
+    <h1>SafeCart Settings</h1>
+
+    <label for="sb-key">Google Safe Browsing API key</label>
+    <input id="sb-key" type="password" placeholder="Optional — leave blank to skip" />
+    <div class="hint">Get a key at console.cloud.google.com → Enable the "Safe Browsing API".</div>
+
+    <label for="pt-key">PhishTank application key</label>
+    <input id="pt-key" type="password" placeholder="Optional" />
+    <div class="hint">Without a key, PhishTank requests may be throttled.</div>
+
+    <div class="row">
+      <input id="enabled" type="checkbox" />
+      <label for="enabled" style="margin: 0;">Enable phishing detection</label>
+    </div>
+
+    <div class="row">
+      <input id="enable-payments" type="checkbox" />
+      <label for="enable-payments" style="margin: 0;">Enable payment tracking</label>
+    </div>
+
+    <div class="row">
+      <input id="enable-breach" type="checkbox" />
+      <label for="enable-breach" style="margin: 0;">Enable breach monitoring</label>
+    </div>
+    <div class="hint">Queries only public merchant domains against HaveIBeenPwned. No PII leaves your browser.</div>
+    <div class="row">
+      <button id="breach-scan" type="button">Scan tracked stores now</button>
+      <a id="open-breaches" href="#" style="font-size: 12px; color: #2f62e0;">Open breach dashboard</a>
+      <span id="breach-scan-status" style="font-size: 12px; color: #555;"></span>
+    </div>
+
+    <h2 style="font-size: 16px; margin-top: 28px;">Gmail connection</h2>
+    <div class="hint">
+      SafeCart checks your inbox for order confirmations 30 minutes after each purchase.
+      All reads happen in this browser — no SafeCart server receives your email.
+      Scope requested: <code>gmail.readonly</code>.
+    </div>
+    <div class="row">
+      <button id="connect-gmail" type="button" style="background:#2f62e0;color:#fff;">Connect Gmail</button>
+      <span id="gmail-status" style="font-size: 12px; color: #555;"></span>
+    </div>
+
+    <h2 style="font-size: 16px; margin-top: 28px;">Account</h2>
+    <div class="hint">Sign in with Supabase to enable subscriptions and proxied API calls. Your password goes directly to Supabase — SafeCart's server never sees it.</div>
+
+    <label for="supabase-url">Supabase project URL</label>
+    <input id="supabase-url" type="text" placeholder="https://xxx.supabase.co" />
+
+    <label for="supabase-anon">Supabase anon key</label>
+    <input id="supabase-anon" type="password" placeholder="ey..." />
+
+    <div id="auth-signed-out">
+      <label for="auth-email">Email</label>
+      <input id="auth-email" type="email" autocomplete="email" />
+      <label for="auth-password">Password</label>
+      <input id="auth-password" type="password" autocomplete="current-password" />
+      <div class="row" style="margin-top: 10px;">
+        <button id="auth-signin" type="button" style="background:#2f62e0;color:#fff;">Sign in</button>
+        <button id="auth-signup" type="button">Create account</button>
+        <span id="auth-status" style="font-size: 12px;"></span>
+      </div>
+    </div>
+    <div id="auth-signed-in" hidden>
+      <div class="row">
+        <span id="auth-current" style="font-weight:600;"></span>
+        <button id="auth-signout" type="button">Sign out</button>
+      </div>
+    </div>
+
+    <h2 style="font-size: 16px; margin-top: 28px;">Subscription</h2>
+    <div class="hint">Subscription state is managed by the SafeCart server (it talks to Stripe on your behalf).</div>
+    <div class="row" style="margin-top: 4px;">
+      <span id="sub-tier" style="font-weight:600;">Loading…</span>
+      <span id="sub-status" style="font-size: 12px; color: #555;"></span>
+    </div>
+    <div class="row">
+      <button id="sub-refresh" type="button">Refresh subscription</button>
+      <button id="sub-portal" type="button">Manage subscription</button>
+    </div>
+    <label for="server-url">Subscription server URL</label>
+    <input id="server-url" type="text" placeholder="http://localhost:3001" />
+    <div class="hint">Used for checkout, webhooks, and subscription status. Override for production deploys.</div>
+
+    <button id="save">Save</button>
+    <span id="status" style="margin-left: 12px; font-size: 12px; color: #2f9e44;"></span>
+
+    <script src="options.js"></script>
+  </body>
+</html>

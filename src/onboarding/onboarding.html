@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to SafeCart</title>
+  <link rel="stylesheet" href="onboarding.css">
+</head>
+<body>
+  <div class="container">
+    <div class="slides">
+
+      <!-- Slide 1: Welcome -->
+      <section class="slide active" data-slide="1">
+        <div class="slide-content">
+          <img src="../../icons/icon128.png" alt="SafeCart" class="hero-icon">
+          <h1>Welcome to SafeCart</h1>
+          <p class="lead">Your shopping safety net for the internet.</p>
+          <p class="sub">SafeCart watches over you while you shop online — in three ways. Let's take a 30-second tour.</p>
+          <button class="btn-primary" data-action="next">Show me how →</button>
+          <button class="btn-skip" data-action="skip">Skip tour</button>
+        </div>
+      </section>
+
+      <!-- Slide 2: Phishing Protection -->
+      <section class="slide" data-slide="2">
+        <div class="slide-content">
+          <div class="feature-icon phishing-icon">🛡️</div>
+          <h2>1. Phishing Protection</h2>
+          <p class="lead">Stop entering your card on fake stores.</p>
+          <p class="sub">When you land on any checkout page, SafeCart checks the URL against Google Safe Browsing, looks at how old the domain is, and detects lookalike scams. If something's off, you'll see a red warning <strong>before</strong> you type your card.</p>
+          <div class="example-callout dangerous">
+            <span class="badge">⚠ Dangerous</span>
+            <span class="text">amaz0n-checkout.xyz looks like a phishing scam</span>
+          </div>
+          <div class="nav-buttons">
+            <button class="btn-secondary" data-action="prev">← Back</button>
+            <button class="btn-primary" data-action="next">Next →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3: Payment Tracking -->
+      <section class="slide" data-slide="3">
+        <div class="slide-content">
+          <div class="feature-icon payment-icon">💳</div>
+          <h2>2. Payment Tracking</h2>
+          <p class="lead">Never lose a receipt again.</p>
+          <p class="sub">Every time you click "Buy" on a real store, SafeCart logs the purchase automatically. See all your online purchases in one place. If something goes wrong, start a chargeback in one click.</p>
+          <div class="example-callout success">
+            <span class="badge">✓ Tracked</span>
+            <span class="text">Amazon — $42.99 — Jan 15</span>
+          </div>
+          <div class="nav-buttons">
+            <button class="btn-secondary" data-action="prev">← Back</button>
+            <button class="btn-primary" data-action="next">Next →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Breach Alerts -->
+      <section class="slide" data-slide="4">
+        <div class="slide-content">
+          <div class="feature-icon breach-icon">🚨</div>
+          <h2>3. Breach Alerts</h2>
+          <p class="lead">Know within hours when a store you shop at gets hacked.</p>
+          <p class="sub">SafeCart watches the stores you've visited against the Have I Been Pwned database. If your data leaks, you'll get a notification with exactly what was exposed and what to do next.</p>
+          <div class="example-callout warning">
+            <span class="badge">🚨 Alert</span>
+            <span class="text">A retailer you shop at had a data breach — passwords + emails exposed</span>
+          </div>
+          <div class="nav-buttons">
+            <button class="btn-secondary" data-action="prev">← Back</button>
+            <button class="btn-primary" data-action="next">Next →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 5: Get Started -->
+      <section class="slide" data-slide="5">
+        <div class="slide-content">
+          <div class="feature-icon ready-icon">✨</div>
+          <h2>You're all set!</h2>
+          <p class="lead">SafeCart is now protecting you.</p>
+          <p class="sub">Open the SafeCart icon in your toolbar any time to see your dashboard. Sign up free to unlock cross-device sync, Gmail receipt matching, and priority breach alerts.</p>
+          <div class="cta-row">
+            <button class="btn-primary" data-action="signup">Sign up free</button>
+            <button class="btn-secondary" data-action="close">Maybe later</button>
+          </div>
+          <p class="footnote">Tip: Pin the SafeCart icon to your toolbar so it's always one click away.</p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Progress dots -->
+    <div class="progress-dots">
+      <span class="dot active" data-target="1"></span>
+      <span class="dot" data-target="2"></span>
+      <span class="dot" data-target="3"></span>
+      <span class="dot" data-target="4"></span>
+      <span class="dot" data-target="5"></span>
+    </div>
+  </div>
+
+  <script src="onboarding.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "safecart-server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "SafeCart subscription backend (Stripe Checkout + webhooks).",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "setup:stripe": "node scripts/setup-stripe.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "stripe": "^17.5.0"
+  }
+}

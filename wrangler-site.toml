@@ -1,0 +1,8 @@
+name = "morning-scene-398e"
+compatibility_date = "2026-05-31"
+
+# Static-assets-only Worker that serves the marketing site at safecart.co.
+# Mirrors the existing deployed config (no bindings, no routes — the safecart.co
+# custom-domain binding is managed on the service and is left untouched here).
+[assets]
+directory = "C:/Users/Hew Zi Jian/OneDrive/Documents/safecart/website"

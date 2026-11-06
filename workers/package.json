@@ -1,0 +1,19 @@
+{
+  "name": "safecart-workers",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "SafeCart Cloudflare Workers backend: Supabase Auth, subscriptions, and secret-key API proxies.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "dependencies": {
+    "hono": "^4.6.14",
+    "stripe": "^17.5.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.95.0"
+  }
+}
